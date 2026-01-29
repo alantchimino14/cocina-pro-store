@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocina Pro - Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; }
+
+        /* Sidebar */
+        .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 240px; background: #1a1a2e; color: white; padding: 20px 0; z-index: 1000; }
+        .sidebar-header { padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .sidebar-header h1 { font-size: 1.3rem; color: #e94560; }
+        .sidebar-header span { font-size: 0.75rem; opacity: 0.6; }
+
+        .nav-section { margin-bottom: 25px; }
+        .nav-section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.5; padding: 0 20px; margin-bottom: 10px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); }
+        .nav-item.active { background: rgba(233, 69, 96, 0.2); border-left-color: #e94560; }
+        .nav-item.disabled { opacity: 0.4; cursor: not-allowed; }
+        .nav-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+
+        /* Main content */
+        .main { margin-left: 240px; min-height: 100vh; }
+
+        /* Header */
+        .header { background: white; padding: 20px 30px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .header h2 { font-size: 1.4rem; color: #1a1a2e; }
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+
+        /* Content area */
+        .content { padding: 30px; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+
+        /* Sub-tabs */
+        .sub-tabs { display: flex; gap: 5px; background: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; }
+        .sub-tab { padding: 10px 20px; background: #f0f0f0; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+        .sub-tab:hover { background: #e0e0e0; }
+        .sub-tab.active { background: #e94560; color: white; }
+
+        /* Stats bar */
+        .stats-bar { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; flex: 1; min-width: 150px; }
+        .stat-label { font-size: 0.8rem; color: #666; margin-bottom: 5px; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; color: #1a1a2e; }
+        .stat-value.green { color: #27ae60; }
+        .stat-value.orange { color: #f39c12; }
+        .stat-value.red { color: #e74c3c; }
+        .stat-value.blue { color: #3498db; }
+
+        /* Cards */
+        .card { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .card h3 { font-size: 1.1rem; margin-bottom: 15px; color: #1a1a2e; padding-bottom: 10px; border-bottom: 2px solid #e94560; }
+
+        /* Grid layouts */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
+
+        /* Products */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; max-height: 65vh; overflow-y: auto; padding: 5px; }
+
+        .product-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; background: #fafafa; transition: all 0.2s; }
+        .product-card:hover { border-color: #e94560; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .product-card.in-cart { border-color: #27ae60; background: #f0fff4; }
+
+        .product-img { width: 100%; height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; margin-bottom: 10px; text-align: center; padding: 8px; }
+        .product-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; line-height: 1.3; }
+        .product-desc { font-size: 0.7rem; color: #666; margin-bottom: 10px; max-height: 40px; overflow: hidden; }
+
+        .product-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 0.7rem; margin-bottom: 10px; }
+        .spec { background: #f0f0f0; padding: 4px 6px; border-radius: 3px; }
+        .spec-label { color: #888; }
+        .spec-value { font-weight: 600; }
+
+        .product-prices { margin-bottom: 10px; padding: 10px; background: #fff9e6; border-radius: 4px; font-size: 0.8rem; }
+        .price-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .price-row:last-child { margin-bottom: 0; }
+        .price-label { color: #666; }
+        .price-value { font-weight: 600; }
+        .price-value.highlight { color: #27ae60; font-size: 1rem; }
+        .price-value.meli { color: #3498db; }
+
+        .product-actions { display: flex; gap: 8px; align-items: center; }
+        .product-actions input { width: 60px; padding: 6px; text-align: center; border: 1px solid #ddd; border-radius: 4px; }
+        .product-actions button { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; flex: 1; }
+        .btn-add { background: #e94560; color: white; }
+        .btn-add:hover { background: #d63d56; }
+        .btn-remove { background: #95a5a6; color: white; }
+        .btn-remove:hover { background: #7f8c8d; }
+
+        /* Cart sidebar */
+        .cart-panel { background: white; border-radius: 8px; padding: 20px; position: sticky; top: 100px; }
+        .cart-panel h3 { font-size: 1rem; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #27ae60; }
+
+        .progress-bar { height: 16px; background: #eee; border-radius: 8px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; transition: width 0.3s; }
+        .progress-fill.ok { background: #27ae60; }
+        .progress-fill.warning { background: #f39c12; }
+        .progress-fill.danger { background: #e74c3c; }
+
+        .cart-items { max-height: 300px; overflow-y: auto; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.8rem; }
+        .cart-item-name { font-weight: 600; flex: 1; }
+        .cart-item-qty { display: flex; align-items: center; gap: 5px; }
+        .cart-item-qty input { width: 45px; padding: 4px; text-align: center; border: 1px solid #ddd; border-radius: 3px; }
+
+        .cart-summary { margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px; font-size: 0.85rem; }
+        .summary-row { display: flex; justify-content: space-between; padding: 6px 0; }
+        .summary-row.total { font-weight: bold; font-size: 1rem; border-top: 2px solid #ddd; margin-top: 10px; padding-top: 10px; }
+
+        .cart-buttons { display: flex; gap: 10px; margin-top: 15px; }
+        .cart-buttons button { flex: 1; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-export { background: #27ae60; color: white; }
+        .btn-clear { background: #95a5a6; color: white; }
+
+        .empty-cart { text-align: center; padding: 30px; color: #999; }
+
+        /* Filters */
+        .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filters input, .filters select { padding: 10px 15px; border: 1px solid #ddd; border-radius: 6px; }
+        .filters input[type="text"] { flex: 1; min-width: 200px; }
+
+        /* Tables */
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .data-table th, .data-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .data-table th { background: #f8f9fa; font-weight: 600; position: sticky; top: 0; }
+        .data-table tr:hover { background: #f8f9fa; }
+        .data-table .positive { color: #27ae60; font-weight: bold; }
+        .data-table .negative { color: #e74c3c; font-weight: bold; }
+
+        /* KPIs */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .kpi { background: white; padding: 25px; border-radius: 8px; text-align: center; }
+        .kpi-value { font-size: 2rem; font-weight: bold; color: #1a1a2e; }
+        .kpi-label { font-size: 0.85rem; color: #666; margin-top: 5px; }
+        .kpi.green .kpi-value { color: #27ae60; }
+        .kpi.orange .kpi-value { color: #f39c12; }
+        .kpi.blue .kpi-value { color: #3498db; }
+        .kpi.red .kpi-value { color: #e94560; }
+
+        /* Help section */
+        .help-content { line-height: 1.8; }
+        .help-content h4 { color: #1a1a2e; margin: 25px 0 15px; font-size: 1.1rem; }
+        .help-content h4:first-child { margin-top: 0; }
+        .help-content p { margin-bottom: 15px; color: #555; }
+        .help-content ul, .help-content ol { margin: 15px 0; padding-left: 25px; }
+        .help-content li { margin-bottom: 10px; }
+        .help-content code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .help-content .tip { background: #e8f5e9; border-left: 4px solid #27ae60; padding: 15px; margin: 15px 0; border-radius: 0 6px 6px 0; }
+        .help-content .warning { background: #fff3e0; border-left: 4px solid #f39c12; padding: 15px; margin: 15px 0; border-radius: 0 6px 6px 0; }
+        .help-content .info { background: #e3f2fd; border-left: 4px solid #3498db; padding: 15px; margin: 15px 0; border-radius: 0 6px 6px 0; }
+
+        .term-grid { display: grid; grid-template-columns: 150px 1fr; gap: 10px; margin: 15px 0; }
+        .term { font-weight: 600; color: #1a1a2e; }
+        .definition { color: #555; }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 900px) {
+            .sidebar { width: 60px; }
+            .sidebar-header h1, .sidebar-header span, .nav-section-title, .nav-item span { display: none; }
+            .nav-item { justify-content: center; padding: 15px; }
+            .main { margin-left: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>Cocina Pro</h1>
+            <span>Panel de Administracion</span>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">General</div>
+            <div class="nav-item disabled">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Inventario</div>
+            <div class="nav-item disabled">
+                <span class="nav-icon">🏷️</span>
+                <span>Categorias</span>
+            </div>
+            <div class="nav-item disabled">
+                <span class="nav-icon">📈</span>
+                <span>Stock</span>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Importacion</div>
+            <div class="nav-item active" onclick="showSection('container')" data-section="container">
+                <span class="nav-icon">🚢</span>
+                <span>Pedidos Contenedor</span>
+            </div>
+            <div class="nav-item" onclick="showSection('productos')" data-section="productos">
+                <span class="nav-icon">📦</span>
+                <span>Catalogo Productos</span>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Ventas</div>
+            <div class="nav-item disabled">
+                <span class="nav-icon">🛒</span>
+                <span>Ordenes</span>
+            </div>
+            <div class="nav-item disabled">
+                <span class="nav-icon">👥</span>
+                <span>Clientes</span>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Configuracion</div>
+            <div class="nav-item disabled">
+                <span class="nav-icon">⚙️</span>
+                <span>Ajustes</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="header">
+            <h2 id="section-title">Pedidos de Contenedor</h2>
+            <div class="header-actions">
+                <span style="font-size: 0.85rem; color: #666;">USD/CLP: $950</span>
+            </div>
+        </div>
+
+        <!-- Container Orders Section -->
+        <div class="content-section active" id="section-container">
+            <div class="content">
+                <div class="sub-tabs">
+                    <button class="sub-tab active" onclick="showContainerTab('order')">Armar Pedido</button>
+                    <button class="sub-tab" onclick="showContainerTab('analysis')">Analisis Rentabilidad</button>
+                    <button class="sub-tab" onclick="showContainerTab('help')">Ayuda</button>
+                </div>
+
+                <!-- Order Tab -->
+                <div id="container-order" class="container-tab">
+                    <div class="stats-bar">
+                        <div class="stat-card">
+                            <div class="stat-label">Capacidad Contenedor</div>
+                            <div class="stat-value">28 m³</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Volumen Usado</div>
+                            <div class="stat-value" id="stat-volume">0.00 m³</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">% Ocupado</div>
+                            <div class="stat-value" id="stat-percent">0%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Costo Contenedor</div>
+                            <div class="stat-value">$1,750 USD</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total FOB</div>
+                            <div class="stat-value blue" id="stat-fob">$0 USD</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Unidades</div>
+                            <div class="stat-value" id="stat-units">0</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <div class="card">
+                                <h3>Catalogo de Productos</h3>
+                                <div class="filters">
+                                    <input type="text" id="search" placeholder="Buscar producto...">
+                                    <select id="category-filter">
+                                        <option value="">Todas las categorias</option>
+                                        <option value="sarten">Sartenes / Cookware</option>
+                                        <option value="cuchillo">Cuchillos</option>
+                                        <option value="tapa">Tapas de Vidrio</option>
+                                        <option value="cutting">Tablas / Cutting</option>
+                                    </select>
+                                </div>
+                                <div class="products-grid" id="products-grid"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="cart-panel">
+                                <h3>Pedido Actual</h3>
+                                <div class="progress-bar">
+                                    <div class="progress-fill ok" id="progress-fill" style="width: 0%"></div>
+                                </div>
+                                <div class="cart-items" id="cart-items">
+                                    <div class="empty-cart">Agrega productos al pedido</div>
+                                </div>
+                                <div class="cart-summary" id="cart-summary" style="display: none;">
+                                    <div class="summary-row">
+                                        <span>Volumen Total:</span>
+                                        <span id="summary-volume">0 m³</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Total Cajas:</span>
+                                        <span id="summary-boxes">0</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Total Unidades:</span>
+                                        <span id="summary-units">0</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>FOB Total:</span>
+                                        <span id="summary-fob">$0</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Transporte Est.:</span>
+                                        <span id="summary-transport">$0</span>
+                                    </div>
+                                    <div class="summary-row total">
+                                        <span>Costo Total CL:</span>
+                                        <span id="summary-total">$0</span>
+                                    </div>
+                                </div>
+                                <div class="cart-buttons">
+                                    <button class="btn-export" onclick="exportCSV()">CSV</button>
+                                    <button class="btn-export" onclick="exportPDF()" style="background:#3498db;">PDF</button>
+                                    <button class="btn-clear" onclick="clearCart()">Limpiar</button>
+                                </div>
+                                <div style="margin-top:10px;">
+                                    <label style="display:block;padding:10px;background:#f0f0f0;border-radius:6px;text-align:center;cursor:pointer;font-size:0.85rem;">
+                                        📁 Cargar CSV
+                                        <input type="file" id="csv-upload" accept=".csv" onchange="importCSV(event)" style="display:none;">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Tab -->
+                <div id="container-analysis" class="container-tab" style="display: none;">
+                    <div class="kpi-grid">
+                        <div class="kpi green">
+                            <div class="kpi-value" id="kpi-margin-avg">73%</div>
+                            <div class="kpi-label">Margen Promedio vs Mercado</div>
+                        </div>
+                        <div class="kpi blue">
+                            <div class="kpi-value" id="kpi-products-ref">5</div>
+                            <div class="kpi-label">Productos con Ref. Mercado</div>
+                        </div>
+                        <div class="kpi orange">
+                            <div class="kpi-value" id="kpi-potential">$21M</div>
+                            <div class="kpi-label">Ganancia Potencial / Contenedor</div>
+                        </div>
+                        <div class="kpi red">
+                            <div class="kpi-value">~43%</div>
+                            <div class="kpi-label">ROI Estimado</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Comparativa de Precios: Costo vs Mercado (MercadoLibre)</h3>
+                        <div style="overflow-x: auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Costo CL</th>
+                                        <th>Precio Min Venta</th>
+                                        <th>Precio Meli</th>
+                                        <th>Margen vs Min</th>
+                                        <th>Margen vs Meli</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="margin-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <h3>Resumen por Categoria</h3>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Categoria</th>
+                                        <th>Productos</th>
+                                        <th>Margen Prom.</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="category-summary"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="card">
+                            <h3>Proyeccion Contenedor Completo</h3>
+                            <table class="data-table">
+                                <tr><td>Capacidad total</td><td><strong>28 m³</strong></td></tr>
+                                <tr><td>Costo contenedor</td><td><strong>$1,750 USD</strong></td></tr>
+                                <tr><td>FOB estimado (lleno)</td><td><strong>~$50,000 USD</strong></td></tr>
+                                <tr><td>Costo total puesto CL</td><td><strong>~$49M CLP</strong></td></tr>
+                                <tr><td>Venta potencial (Meli)</td><td><strong>~$70M CLP</strong></td></tr>
+                                <tr><td class="positive">Ganancia bruta</td><td class="positive"><strong>~$21M CLP</strong></td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Help Tab -->
+                <div id="container-help" class="container-tab" style="display: none;">
+                    <div class="card">
+                        <h3>Guia de Uso - Pedidos de Contenedor</h3>
+                        <div class="help-content">
+                            <h4>¿Que es esta herramienta?</h4>
+                            <p>Esta herramienta te permite planificar y armar pedidos de importacion por contenedor, calculando automaticamente volumenes, costos y margenes de ganancia para cada producto.</p>
+
+                            <div class="info">
+                                <strong>Importante:</strong> Los datos estan basados en cotizaciones reales de proveedores y precios de referencia del mercado chileno (MercadoLibre).
+                            </div>
+
+                            <h4>¿Como armar un pedido?</h4>
+                            <ol>
+                                <li><strong>Explora el catalogo:</strong> Usa el buscador o filtro por categoria para encontrar productos.</li>
+                                <li><strong>Revisa los detalles:</strong> Cada producto muestra CBM, FOB, unidades por caja y precios.</li>
+                                <li><strong>Agrega al pedido:</strong> Indica la cantidad de <em>cajas</em> y haz clic en "Agregar".</li>
+                                <li><strong>Monitorea el contenedor:</strong> La barra de progreso y estadisticas se actualizan en tiempo real.</li>
+                                <li><strong>Exporta:</strong> Cuando estes listo, exporta a CSV para compartir o guardar.</li>
+                            </ol>
+
+                            <div class="tip">
+                                <strong>Tip:</strong> Intenta llenar el contenedor al 90-100% para optimizar el costo de transporte por unidad.
+                            </div>
+
+                            <h4>Glosario de Terminos</h4>
+                            <div class="term-grid">
+                                <div class="term">CBM / m³</div>
+                                <div class="definition">Metros cubicos. Medida de volumen que ocupa el producto empacado.</div>
+
+                                <div class="term">FOB (USD)</div>
+                                <div class="definition">"Free On Board" - Precio del producto puesto en el puerto de origen (China), sin incluir flete maritimo ni internacion.</div>
+
+                                <div class="term">Uds/Caja</div>
+                                <div class="definition">Cantidad de unidades que vienen en cada caja/master box del proveedor.</div>
+
+                                <div class="term">Costo CL</div>
+                                <div class="definition">Costo unitario estimado puesto en Chile. Incluye FOB + transporte proporcional.</div>
+
+                                <div class="term">Precio Min Venta</div>
+                                <div class="definition">Precio minimo sugerido de venta para obtener un margen base (~75% sobre costo). Incluye IVA.</div>
+
+                                <div class="term">Precio Meli</div>
+                                <div class="definition">Precio de referencia de productos similares en MercadoLibre Chile.</div>
+
+                                <div class="term">Transporte Est.</div>
+                                <div class="definition">Costo de transporte proporcional segun el % del contenedor que ocupas.</div>
+                            </div>
+
+                            <h4>Capacidad del Contenedor</h4>
+                            <p>Usamos un contenedor de <strong>20 pies (20')</strong> como referencia:</p>
+                            <ul>
+                                <li><strong>Capacidad:</strong> 28 m³ utiles</li>
+                                <li><strong>Costo flete:</strong> ~$1,750 USD (China → Chile)</li>
+                                <li><strong>Tiempo estimado:</strong> 35-45 dias en transito</li>
+                            </ul>
+
+                            <div class="warning">
+                                <strong>Nota:</strong> Si superas el 100% de capacidad, el pedido no cabra en un solo contenedor. Considera dividirlo o usar un contenedor de 40 pies.
+                            </div>
+
+                            <h4>Colores de Estado</h4>
+                            <ul>
+                                <li><span style="color: #27ae60;">●</span> <strong>Verde (0-90%):</strong> Capacidad disponible, todo OK.</li>
+                                <li><span style="color: #f39c12;">●</span> <strong>Amarillo (90-100%):</strong> Casi lleno, optimizando espacio.</li>
+                                <li><span style="color: #e74c3c;">●</span> <strong>Rojo (>100%):</strong> Excede capacidad, reduce productos.</li>
+                            </ul>
+
+                            <h4>Analisis de Rentabilidad</h4>
+                            <p>La pestaña "Analisis Rentabilidad" muestra:</p>
+                            <ul>
+                                <li><strong>Margen vs Mercado:</strong> Diferencia entre tu precio minimo y el precio de mercado (Meli).</li>
+                                <li><strong>ROI estimado:</strong> Retorno sobre la inversion del contenedor completo.</li>
+                                <li><strong>Ganancia potencial:</strong> Utilidad bruta estimada si vendes todo al precio de mercado.</li>
+                            </ul>
+
+                            <div class="tip">
+                                <strong>Tip:</strong> Los productos con mayor margen vs Meli son los mas rentables. Prioriza esos en tu pedido.
+                            </div>
+
+                            <h4>Exportar Pedido</h4>
+                            <p>Al exportar se genera un archivo CSV con:</p>
+                            <ul>
+                                <li>Lista de productos seleccionados</li>
+                                <li>Cantidades (cajas y unidades)</li>
+                                <li>Volumenes y precios FOB</li>
+                                <li>Totales y costo estimado en Chile</li>
+                            </ul>
+                            <p>Este archivo puedes abrirlo en Excel para ajustar o enviar al proveedor.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Productos Section -->
+        <div class="content-section" id="section-productos">
+            <div class="content">
+                <div class="stats-bar">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Productos</div>
+                        <div class="stat-value" id="total-productos">23</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Categorias</div>
+                        <div class="stat-value">4</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Con Ref. Meli</div>
+                        <div class="stat-value blue">5</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Catalogo de Productos</h3>
+                    <div class="info" style="background: #e3f2fd; border-left: 4px solid #3498db; padding: 15px; margin-bottom: 20px; border-radius: 0 6px 6px 0;">
+                        <strong>Proximamente:</strong> Podras agregar, editar y eliminar productos desde aqui. Los cambios se sincronizaran con la tienda web automaticamente.
+                    </div>
+                    <div class="filters">
+                        <input type="text" id="search-productos" placeholder="Buscar producto..." oninput="renderProductosAdmin()">
+                        <select id="filter-cat-productos" onchange="renderProductosAdmin()">
+                            <option value="">Todas las categorias</option>
+                            <option value="sarten">Sartenes</option>
+                            <option value="cuchillo">Cuchillos</option>
+                            <option value="tapa">Tapas</option>
+                            <option value="cutting">Cutting/BBQ</option>
+                        </select>
+                        <button class="btn-add" style="padding:10px 20px;" disabled>+ Agregar Producto</button>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table" id="productos-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Producto</th>
+                                    <th>Categoria</th>
+                                    <th>FOB (USD)</th>
+                                    <th>Costo CL</th>
+                                    <th>Precio Min</th>
+                                    <th>Ref. Meli</th>
+                                    <th>CBM</th>
+                                    <th>Uds/Caja</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productos-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Exportar Datos</h3>
+                    <p style="margin-bottom:15px;color:#666;">Exporta el catalogo completo para usar en otros sistemas o como backup.</p>
+                    <div style="display:flex;gap:10px;">
+                        <button class="btn-export" onclick="exportProductosJSON()">Exportar JSON</button>
+                        <button class="btn-export" style="background:#3498db;" onclick="exportProductosCSV()">Exportar CSV</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CONTAINER_CAPACITY = 28;
+        const CONTAINER_COST = 1750;
+        const USD_TO_CLP = 950;
+
+        const productos = [
+            {
+                id: 1,
+                nombre: "Set Sartenes 4pcs (20-24-26cm + mango)",
+                categoria: "sarten",
+                descripcion: "Interior: 3 capas con circulo temperatura. Exterior: negro resistente al calor. Base induccion.",
+                cbmUnidad: 0.024888,
+                fobUnidad: 17.6,
+                unidadesPorCaja: 4,
+                costoUnitarioCL: 17.99,
+                precioMinVenta: 31.49,
+                precioMinCLP: 35599,
+                precioMeli: 69990
+            },
+            {
+                id: 2,
+                nombre: "Set Cuchillos 16pcs con Bloque",
+                categoria: "cuchillo",
+                descripcion: "8'' chef, 8'' carving, 5'' santoku, 5'' utility, 3.5'' paring, 6x steak, tijera, afilador, bloque pino",
+                cbmUnidad: 0.055,
+                fobUnidad: 26.9,
+                unidadesPorCaja: 4,
+                costoUnitarioCL: 27.77,
+                precioMinVenta: 48.60,
+                precioMinCLP: 54940,
+                precioMeli: 69990
+            },
+            {
+                id: 3,
+                nombre: "Afilador de Cuchillos",
+                categoria: "cuchillo",
+                descripcion: "ABS/TPE/Tungsten Steel/Diamond rod/Ceramic. Para cuchillos normales, tijeras y serrados",
+                cbmUnidad: 0.066,
+                fobUnidad: 3.69,
+                unidadesPorCaja: 40,
+                costoUnitarioCL: 3.79,
+                precioMinVenta: 6.64,
+                precioMinCLP: 7507,
+                precioMeli: 12990
+            },
+            {
+                id: 4,
+                nombre: "Kit Cuchillo y Tenedor BBQ",
+                categoria: "cutting",
+                descripcion: "Cuchillo ss2cr13 1.2mm + Tenedor ss2cr13 1.5mm. Mango rubber wood",
+                cbmUnidad: 0.062,
+                fobUnidad: 1.72,
+                unidadesPorCaja: 80,
+                costoUnitarioCL: 1.77,
+                precioMinVenta: 3.10,
+                precioMinCLP: 3500,
+                precioMeli: null
+            },
+            {
+                id: 5,
+                nombre: "Tabla de Cortar Bambu",
+                categoria: "cutting",
+                descripcion: "Material: ABS + bambu. Tabla 40x20x1cm",
+                cbmUnidad: 0.104,
+                fobUnidad: 3.26,
+                unidadesPorCaja: 30,
+                costoUnitarioCL: 3.48,
+                precioMinVenta: 6.09,
+                precioMinCLP: 6884,
+                precioMeli: null
+            },
+            {
+                id: 6,
+                nombre: "Kit Tabla + Cuchillo + Tenedor",
+                categoria: "cutting",
+                descripcion: "Set completo: tabla bambu 40x20cm + cuchillo + tenedor",
+                cbmUnidad: 0.104,
+                fobUnidad: 4.98,
+                unidadesPorCaja: 20,
+                costoUnitarioCL: 5.31,
+                precioMinVenta: 9.29,
+                precioMinCLP: 10504,
+                precioMeli: 19990
+            },
+            {
+                id: 7,
+                nombre: "Special Cut Knives 2pcs",
+                categoria: "cuchillo",
+                descripcion: "Set 2 cuchillos: 8'' chef + 8'' carving. Mango PP/TPR. Acero 3Cr13. Caja magnetica",
+                cbmUnidad: 0.04,
+                fobUnidad: 3.85,
+                unidadesPorCaja: 24,
+                costoUnitarioCL: 3.96,
+                precioMinVenta: 6.92,
+                precioMinCLP: 7825,
+                precioMeli: null
+            },
+            {
+                id: 8,
+                nombre: "Professional Cut Knives 2pcs",
+                categoria: "cuchillo",
+                descripcion: "Set 2 cuchillos: 8'' chef + 8'' carving. Mango acero hueco. Acero 5Cr15Mov",
+                cbmUnidad: 0.04,
+                fobUnidad: 7.36,
+                unidadesPorCaja: 24,
+                costoUnitarioCL: 7.47,
+                precioMinVenta: 13.06,
+                precioMinCLP: 14770,
+                precioMeli: null
+            },
+            {
+                id: 9,
+                nombre: "German Steel Knives 2pcs",
+                categoria: "cuchillo",
+                descripcion: "Set 2 cuchillos: 8'' chef + 8'' carving. Acero Aleman 1.4116. Mango SS430",
+                cbmUnidad: 0.04,
+                fobUnidad: 8.53,
+                unidadesPorCaja: 24,
+                costoUnitarioCL: 8.64,
+                precioMinVenta: 15.11,
+                precioMinCLP: 17084,
+                precioMeli: null
+            },
+            {
+                id: 10,
+                nombre: "Portacuchillos Madera Magnetico",
+                categoria: "cuchillo",
+                descripcion: "Iman fuerte 25cm. Madera Acacia. Base 26x10x2cm. Peso 1400g",
+                cbmUnidad: 0.075,
+                fobUnidad: 10.35,
+                unidadesPorCaja: 8,
+                costoUnitarioCL: 10.94,
+                precioMinVenta: 19.15,
+                precioMinCLP: 21650,
+                precioMeli: null
+            },
+            {
+                id: 11,
+                nombre: "Olla 16cm Saucepan",
+                categoria: "sarten",
+                descripcion: "Interior Teflon 3 capas. Exterior negro mate. Mango bakelita soft touch. Base induccion",
+                cbmUnidad: 0.0205,
+                fobUnidad: 7.30,
+                unidadesPorCaja: 6,
+                costoUnitarioCL: 7.52,
+                precioMinVenta: 13.15,
+                precioMinCLP: 14869,
+                precioMeli: null
+            },
+            {
+                id: 12,
+                nombre: "Sarten 20cm Frying Pan",
+                categoria: "sarten",
+                descripcion: "Interior Teflon 3 capas. Exterior negro mate. Mango bakelita soft touch. Base induccion",
+                cbmUnidad: 0.0157,
+                fobUnidad: 7.75,
+                unidadesPorCaja: 6,
+                costoUnitarioCL: 7.91,
+                precioMinVenta: 13.85,
+                precioMinCLP: 15658,
+                precioMeli: null
+            },
+            {
+                id: 13,
+                nombre: "Sarten 24cm Frying Pan",
+                categoria: "sarten",
+                descripcion: "Interior Teflon 3 capas. Exterior negro mate. Mango bakelita soft touch. Base induccion",
+                cbmUnidad: 0.0229,
+                fobUnidad: 8.91,
+                unidadesPorCaja: 6,
+                costoUnitarioCL: 9.15,
+                precioMinVenta: 16.01,
+                precioMinCLP: 18096,
+                precioMeli: null
+            },
+            {
+                id: 14,
+                nombre: "Sarten Honda 24cm Deep",
+                categoria: "sarten",
+                descripcion: "Interior Teflon 3 capas. Exterior negro mate. Mango bakelita soft touch. Base induccion",
+                cbmUnidad: 0.0269,
+                fobUnidad: 10.24,
+                unidadesPorCaja: 6,
+                costoUnitarioCL: 10.53,
+                precioMinVenta: 18.42,
+                precioMinCLP: 20826,
+                precioMeli: null
+            },
+            {
+                id: 15,
+                nombre: "Sarten Honda 28cm Deep",
+                categoria: "sarten",
+                descripcion: "Interior Teflon 3 capas. Exterior negro mate. Mango bakelita soft touch. Base induccion",
+                cbmUnidad: 0.0372,
+                fobUnidad: 12.13,
+                unidadesPorCaja: 6,
+                costoUnitarioCL: 12.52,
+                precioMinVenta: 21.91,
+                precioMinCLP: 24771,
+                precioMeli: null
+            },
+            {
+                id: 16,
+                nombre: "Cacerola 24cm Casserole",
+                categoria: "sarten",
+                descripcion: "Interior Teflon 3 capas. Exterior negro mate. 2 asas bakelita. Base induccion",
+                cbmUnidad: 0.0614,
+                fobUnidad: 11.93,
+                unidadesPorCaja: 6,
+                costoUnitarioCL: 12.58,
+                precioMinVenta: 22.02,
+                precioMinCLP: 24893,
+                precioMeli: null
+            },
+            {
+                id: 17,
+                nombre: "Cacerola 28cm Casserole",
+                categoria: "sarten",
+                descripcion: "Interior Teflon 3 capas. Exterior negro mate. 2 asas bakelita. Base induccion",
+                cbmUnidad: 0.0897,
+                fobUnidad: 14.28,
+                unidadesPorCaja: 6,
+                costoUnitarioCL: 15.23,
+                precioMinVenta: 26.65,
+                precioMinCLP: 30129,
+                precioMeli: null
+            },
+            {
+                id: 18,
+                nombre: "Milk Pan / Olla Leche",
+                categoria: "sarten",
+                descripcion: "Interior PFLUON 3 capas. Exterior negro mate. Mango bakelita azul. Base induccion",
+                cbmUnidad: 0.0303,
+                fobUnidad: 3.99,
+                unidadesPorCaja: 12,
+                costoUnitarioCL: 4.15,
+                precioMinVenta: 7.26,
+                precioMinCLP: 8211,
+                precioMeli: null
+            },
+            {
+                id: 19,
+                nombre: "Tapa Vidrio 16cm",
+                categoria: "tapa",
+                descripcion: "Vidrio templado, aro acero inox, pomo bakelita soft touch",
+                cbmUnidad: 0.0127,
+                fobUnidad: 1.85,
+                unidadesPorCaja: 6,
+                costoUnitarioCL: 1.98,
+                precioMinVenta: 3.47,
+                precioMinCLP: 3922,
+                precioMeli: null
+            },
+            {
+                id: 20,
+                nombre: "Tapa Vidrio 20cm",
+                categoria: "tapa",
+                descripcion: "Vidrio templado, aro acero inox, pomo bakelita soft touch",
+                cbmUnidad: 0.0189,
+                fobUnidad: 1.97,
+                unidadesPorCaja: 6,
+                costoUnitarioCL: 2.17,
+                precioMinVenta: 3.80,
+                precioMinCLP: 4293,
+                precioMeli: null
+            },
+            {
+                id: 21,
+                nombre: "Tapa Vidrio 24cm",
+                categoria: "tapa",
+                descripcion: "Vidrio templado, aro acero inox, pomo bakelita soft touch",
+                cbmUnidad: 0.0270,
+                fobUnidad: 2.21,
+                unidadesPorCaja: 6,
+                costoUnitarioCL: 2.50,
+                precioMinVenta: 4.37,
+                precioMinCLP: 4945,
+                precioMeli: null
+            },
+            {
+                id: 22,
+                nombre: "Tapa Vidrio 28cm",
+                categoria: "tapa",
+                descripcion: "Vidrio templado, aro acero inox, pomo bakelita soft touch",
+                cbmUnidad: 0.0360,
+                fobUnidad: 2.46,
+                unidadesPorCaja: 6,
+                costoUnitarioCL: 2.84,
+                precioMinVenta: 4.97,
+                precioMinCLP: 5613,
+                precioMeli: null
+            },
+            {
+                id: 23,
+                nombre: "Set Forjado 5pcs Ceramica",
+                categoria: "sarten",
+                descripcion: "20cm fry, 24cm wok, 20cm sauce, 20cm tapa, mango desmontable. Ceramica marble coating",
+                cbmUnidad: 0.0458,
+                fobUnidad: 19.5,
+                unidadesPorCaja: 4,
+                costoUnitarioCL: 20.22,
+                precioMinVenta: 35.39,
+                precioMinCLP: 40012,
+                precioMeli: 127000
+            }
+        ];
+
+        let cart = {};
+
+        function formatCLP(num) {
+            return '$' + Math.round(num).toLocaleString('es-CL');
+        }
+
+        function formatUSD(num) {
+            return '$' + num.toFixed(2);
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+        }
+
+        function showContainerTab(tab) {
+            document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.container-tab').forEach(t => t.style.display = 'none');
+            document.getElementById('container-' + tab).style.display = 'block';
+
+            if (tab === 'analysis') {
+                renderAnalysis();
+            }
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const search = document.getElementById('search').value.toLowerCase();
+            const category = document.getElementById('category-filter').value;
+
+            const filtered = productos.filter(p => {
+                const matchSearch = p.nombre.toLowerCase().includes(search) || p.descripcion.toLowerCase().includes(search);
+                const matchCategory = !category || p.categoria === category;
+                return matchSearch && matchCategory;
+            });
+
+            grid.innerHTML = filtered.map(p => {
+                const inCart = cart[p.id];
+                const hasMeli = p.precioMeli !== null;
+                return `
+                    <div class="product-card ${inCart ? 'in-cart' : ''}">
+                        <div class="product-img">${p.nombre}</div>
+                        <div class="product-name">${p.nombre}</div>
+                        <div class="product-desc">${p.descripcion}</div>
+                        <div class="product-specs">
+                            <div class="spec"><span class="spec-label">CBM/caja:</span> <span class="spec-value">${(p.cbmUnidad * p.unidadesPorCaja).toFixed(3)}</span></div>
+                            <div class="spec"><span class="spec-label">Uds/caja:</span> <span class="spec-value">${p.unidadesPorCaja}</span></div>
+                            <div class="spec"><span class="spec-label">FOB/ud:</span> <span class="spec-value">${formatUSD(p.fobUnidad)}</span></div>
+                            <div class="spec"><span class="spec-label">Costo CL:</span> <span class="spec-value">${formatUSD(p.costoUnitarioCL)}</span></div>
+                        </div>
+                        <div class="product-prices">
+                            <div class="price-row">
+                                <span class="price-label">Precio Min Venta:</span>
+                                <span class="price-value highlight">${formatCLP(p.precioMinCLP)}</span>
+                            </div>
+                            ${hasMeli ? `
+                            <div class="price-row">
+                                <span class="price-label">Ref. Meli:</span>
+                                <span class="price-value meli">${formatCLP(p.precioMeli)}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                        <div class="product-actions">
+                            <input type="number" id="qty-${p.id}" value="${inCart || 1}" min="1">
+                            ${inCart ?
+                                `<button class="btn-remove" onclick="removeFromCart(${p.id})">Quitar</button>` :
+                                `<button class="btn-add" onclick="addToCart(${p.id})">Agregar</button>`
+                            }
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addToCart(id) {
+            const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
+            cart[id] = qty;
+            renderProducts();
+            renderCart();
+            updateStats();
+        }
+
+        function removeFromCart(id) {
+            delete cart[id];
+            renderProducts();
+            renderCart();
+            updateStats();
+        }
+
+        function updateCartQty(id, qty) {
+            if (qty < 1) {
+                removeFromCart(id);
+                return;
+            }
+            cart[id] = parseInt(qty);
+            renderCart();
+            updateStats();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            const summary = document.getElementById('cart-summary');
+            const cartIds = Object.keys(cart);
+
+            if (cartIds.length === 0) {
+                container.innerHTML = '<div class="empty-cart">Agrega productos al pedido</div>';
+                summary.style.display = 'none';
+                return;
+            }
+
+            summary.style.display = 'block';
+            container.innerHTML = cartIds.map(id => {
+                const p = productos.find(prod => prod.id == id);
+                const cajas = cart[id];
+                const units = cajas * p.unidadesPorCaja;
+
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-name">${p.nombre.substring(0, 25)}...</div>
+                        <div class="cart-item-qty">
+                            <input type="number" value="${cajas}" min="0" onchange="updateCartQty(${id}, this.value)">
+                            <span>cj</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStats() {
+            let totalVolume = 0;
+            let totalFOB = 0;
+            let totalUnits = 0;
+            let totalBoxes = 0;
+
+            Object.keys(cart).forEach(id => {
+                const p = productos.find(prod => prod.id == id);
+                const cajas = cart[id];
+                totalVolume += cajas * p.cbmUnidad * p.unidadesPorCaja;
+                totalFOB += cajas * p.fobUnidad * p.unidadesPorCaja;
+                totalUnits += cajas * p.unidadesPorCaja;
+                totalBoxes += cajas;
+            });
+
+            const percentUsed = (totalVolume / CONTAINER_CAPACITY) * 100;
+            const transportCost = (totalVolume / CONTAINER_CAPACITY) * CONTAINER_COST;
+            const totalCostCL = (totalFOB + transportCost) * USD_TO_CLP;
+
+            // Stats bar
+            document.getElementById('stat-volume').textContent = totalVolume.toFixed(2) + ' m³';
+            document.getElementById('stat-volume').className = 'stat-value ' + (percentUsed > 100 ? 'red' : percentUsed > 90 ? 'orange' : 'green');
+
+            document.getElementById('stat-percent').textContent = percentUsed.toFixed(1) + '%';
+            document.getElementById('stat-percent').className = 'stat-value ' + (percentUsed > 100 ? 'red' : percentUsed > 90 ? 'orange' : 'green');
+
+            document.getElementById('stat-fob').textContent = formatUSD(totalFOB) + ' USD';
+            document.getElementById('stat-units').textContent = totalUnits.toLocaleString();
+
+            // Progress bar
+            const progressFill = document.getElementById('progress-fill');
+            progressFill.style.width = Math.min(percentUsed, 100) + '%';
+            progressFill.className = 'progress-fill ' + (percentUsed > 100 ? 'danger' : percentUsed > 90 ? 'warning' : 'ok');
+
+            // Summary
+            document.getElementById('summary-volume').textContent = totalVolume.toFixed(3) + ' m³';
+            document.getElementById('summary-boxes').textContent = totalBoxes;
+            document.getElementById('summary-units').textContent = totalUnits.toLocaleString();
+            document.getElementById('summary-fob').textContent = formatUSD(totalFOB) + ' USD';
+            document.getElementById('summary-transport').textContent = formatUSD(transportCost) + ' USD';
+            document.getElementById('summary-total').textContent = formatCLP(totalCostCL);
+        }
+
+        function renderAnalysis() {
+            const tableBody = document.getElementById('margin-table-body');
+            const allProducts = productos;
+
+            let totalMargin = 0;
+            let productsWithMeli = 0;
+
+            tableBody.innerHTML = allProducts.map(p => {
+                const hasMeli = p.precioMeli !== null;
+                const marginVsMin = p.precioMinCLP - (p.costoUnitarioCL * USD_TO_CLP);
+                const marginVsMinPct = (marginVsMin / (p.costoUnitarioCL * USD_TO_CLP)) * 100;
+
+                let marginVsMeli = 0;
+                let marginVsMeliPct = 0;
+
+                if (hasMeli) {
+                    marginVsMeli = p.precioMeli - p.precioMinCLP;
+                    marginVsMeliPct = (marginVsMeli / p.precioMinCLP) * 100;
+                    totalMargin += marginVsMeliPct;
+                    productsWithMeli++;
+                }
+
+                return `
+                    <tr>
+                        <td>${p.nombre}</td>
+                        <td>${formatCLP(p.costoUnitarioCL * USD_TO_CLP)}</td>
+                        <td>${formatCLP(p.precioMinCLP)}</td>
+                        <td>${hasMeli ? formatCLP(p.precioMeli) : '<span style="color:#999">-</span>'}</td>
+                        <td class="positive">+${marginVsMinPct.toFixed(0)}%</td>
+                        <td class="${hasMeli ? 'positive' : ''}">${hasMeli ? '+' + marginVsMeliPct.toFixed(0) + '%' : '<span style="color:#999">-</span>'}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            const avgMargin = productsWithMeli > 0 ? totalMargin / productsWithMeli : 0;
+            document.getElementById('kpi-margin-avg').textContent = avgMargin.toFixed(0) + '%';
+            document.getElementById('kpi-products-ref').textContent = productsWithMeli;
+
+            // Category summary
+            const categories = {};
+            productos.forEach(p => {
+                if (!categories[p.categoria]) {
+                    categories[p.categoria] = { count: 0, margins: [] };
+                }
+                categories[p.categoria].count++;
+                if (p.precioMeli) {
+                    const marginPercent = ((p.precioMeli - p.precioMinCLP) / p.precioMinCLP) * 100;
+                    categories[p.categoria].margins.push(marginPercent);
+                }
+            });
+
+            const catNames = { sarten: 'Sartenes', cuchillo: 'Cuchillos', tapa: 'Tapas', cutting: 'Cutting/BBQ' };
+            document.getElementById('category-summary').innerHTML = Object.keys(categories).map(cat => {
+                const avgCatMargin = categories[cat].margins.length > 0
+                    ? categories[cat].margins.reduce((a,b) => a+b, 0) / categories[cat].margins.length
+                    : 0;
+                return `
+                    <tr>
+                        <td>${catNames[cat] || cat}</td>
+                        <td>${categories[cat].count}</td>
+                        <td>${avgCatMargin > 0 ? '+' + avgCatMargin.toFixed(0) + '%' : '<span style="color:#999">Sin ref.</span>'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function exportCSV() {
+            if (Object.keys(cart).length === 0) {
+                alert('El pedido esta vacio');
+                return;
+            }
+
+            let csv = 'Producto,Cajas,Unidades,CBM Total,FOB Unitario,FOB Total\n';
+            let totalVolume = 0, totalFOB = 0;
+
+            Object.keys(cart).forEach(id => {
+                const p = productos.find(prod => prod.id == id);
+                const cajas = cart[id];
+                const units = cajas * p.unidadesPorCaja;
+                const volume = cajas * p.cbmUnidad * p.unidadesPorCaja;
+                const fob = cajas * p.fobUnidad * p.unidadesPorCaja;
+                totalVolume += volume;
+                totalFOB += fob;
+                csv += `"${p.nombre}",${cajas},${units},${volume.toFixed(4)},${p.fobUnidad},${fob.toFixed(2)}\n`;
+            });
+
+            const transportCost = (totalVolume / CONTAINER_CAPACITY) * CONTAINER_COST;
+            csv += `\nTOTALES,,,,${totalFOB.toFixed(2)}\n`;
+            csv += `Volumen Total (m3),,,${totalVolume.toFixed(4)},,\n`;
+            csv += `% Contenedor,,,${((totalVolume/CONTAINER_CAPACITY)*100).toFixed(1)}%,,\n`;
+            csv += `Transporte Est.,,,,$${transportCost.toFixed(2)},\n`;
+            csv += `Costo Total CL,,,,,$${((totalFOB + transportCost) * USD_TO_CLP).toFixed(0)} CLP,\n`;
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'pedido_cocina_pro_' + new Date().toISOString().slice(0,10) + '.csv';
+            link.click();
+        }
+
+        function clearCart() {
+            if (confirm('¿Limpiar todo el pedido?')) {
+                cart = {};
+                renderProducts();
+                renderCart();
+                updateStats();
+            }
+        }
+
+        // Event listeners
+        document.getElementById('search').addEventListener('input', renderProducts);
+        document.getElementById('category-filter').addEventListener('change', renderProducts);
+
+        // Import CSV
+        function importCSV(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+
+                cart = {};
+                let imported = 0;
+
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line || line.startsWith('TOTALES') || line.startsWith('Volumen')) continue;
+
+                    const parts = line.match(/(".*?"|[^,]+)/g);
+                    if (!parts || parts.length < 2) continue;
+
+                    const nombre = parts[0].replace(/"/g, '').trim().toLowerCase();
+                    const cajas = parseInt(parts[1]);
+
+                    if (cajas > 0) {
+                        const producto = productos.find(p =>
+                            p.nombre.toLowerCase().includes(nombre.substring(0, 20)) ||
+                            nombre.includes(p.nombre.toLowerCase().substring(0, 20))
+                        );
+                        if (producto) {
+                            cart[producto.id] = cajas;
+                            imported++;
+                        }
+                    }
+                }
+
+                renderProducts();
+                renderCart();
+                updateStats();
+                alert(`Pedido cargado: ${imported} productos importados`);
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        // Export PDF for distributor
+        function exportPDF() {
+            if (Object.keys(cart).length === 0) {
+                alert('El pedido esta vacio');
+                return;
+            }
+
+            let totalVolume = 0, totalFOB = 0, totalUnits = 0, totalBoxes = 0;
+            const items = [];
+
+            Object.keys(cart).forEach(id => {
+                const p = productos.find(prod => prod.id == id);
+                const cajas = cart[id];
+                const units = cajas * p.unidadesPorCaja;
+                const volume = cajas * p.cbmUnidad * p.unidadesPorCaja;
+                const fob = cajas * p.fobUnidad * p.unidadesPorCaja;
+                totalVolume += volume;
+                totalFOB += fob;
+                totalUnits += units;
+                totalBoxes += cajas;
+                items.push({ p, cajas, units, volume, fob });
+            });
+
+            const percentUsed = (totalVolume / CONTAINER_CAPACITY) * 100;
+            const transportCost = (totalVolume / CONTAINER_CAPACITY) * CONTAINER_COST;
+            const fecha = new Date().toLocaleDateString('es-CL');
+
+            const html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Orden de Pedido - Cocina Pro</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; font-size: 11px; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
+        .logo { font-size: 24px; font-weight: bold; color: #e94560; }
+        .doc-info { text-align: right; }
+        .doc-info h2 { font-size: 14px; margin-bottom: 5px; }
+        .section { margin-bottom: 20px; }
+        .section h3 { background: #f0f0f0; padding: 8px; margin-bottom: 10px; font-size: 12px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .info-box { background: #f9f9f9; padding: 10px; border-radius: 4px; }
+        .info-box label { display: block; font-size: 9px; color: #666; margin-bottom: 3px; }
+        .info-box span { font-size: 14px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #333; color: white; font-size: 10px; }
+        td { font-size: 10px; }
+        .totals { background: #f0f0f0; }
+        .totals td { font-weight: bold; }
+        .footer { margin-top: 30px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 9px; color: #666; }
+        .summary-box { background: #e8f5e9; padding: 15px; border-radius: 4px; margin-top: 20px; }
+        .summary-box h4 { margin-bottom: 10px; }
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .summary-item { display: flex; justify-content: space-between; }
+        @media print { body { padding: 0; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">COCINA PRO</div>
+        <div class="doc-info">
+            <h2>ORDEN DE PEDIDO</h2>
+            <div>Fecha: ${fecha}</div>
+            <div>Ref: CP-${Date.now().toString(36).toUpperCase()}</div>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-box">
+            <label>Capacidad Contenedor</label>
+            <span>28 m³</span>
+        </div>
+        <div class="info-box">
+            <label>Volumen Pedido</label>
+            <span>${totalVolume.toFixed(2)} m³</span>
+        </div>
+        <div class="info-box">
+            <label>% Utilizado</label>
+            <span>${percentUsed.toFixed(1)}%</span>
+        </div>
+        <div class="info-box">
+            <label>Total Cajas</label>
+            <span>${totalBoxes}</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>DETALLE DE PRODUCTOS</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:5%">#</th>
+                    <th style="width:35%">Producto</th>
+                    <th style="width:12%">HS Code</th>
+                    <th style="width:8%">Cajas</th>
+                    <th style="width:8%">Uds</th>
+                    <th style="width:10%">CBM</th>
+                    <th style="width:10%">FOB/Ud</th>
+                    <th style="width:12%">FOB Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${items.map((item, i) => `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${item.p.nombre}</td>
+                    <td>-</td>
+                    <td>${item.cajas}</td>
+                    <td>${item.units}</td>
+                    <td>${item.volume.toFixed(3)}</td>
+                    <td>$${item.p.fobUnidad.toFixed(2)}</td>
+                    <td>$${item.fob.toFixed(2)}</td>
+                </tr>
+                `).join('')}
+                <tr class="totals">
+                    <td colspan="3">TOTALES</td>
+                    <td>${totalBoxes}</td>
+                    <td>${totalUnits}</td>
+                    <td>${totalVolume.toFixed(3)}</td>
+                    <td>-</td>
+                    <td>$${totalFOB.toFixed(2)}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="summary-box">
+        <h4>RESUMEN DE COSTOS</h4>
+        <div class="summary-grid">
+            <div class="summary-item"><span>FOB Total:</span><strong>$${totalFOB.toFixed(2)} USD</strong></div>
+            <div class="summary-item"><span>Flete Estimado:</span><strong>$${transportCost.toFixed(2)} USD</strong></div>
+            <div class="summary-item"><span>Volumen Total:</span><strong>${totalVolume.toFixed(3)} m³</strong></div>
+            <div class="summary-item"><span>Total Unidades:</span><strong>${totalUnits}</strong></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Documento generado el ${fecha} - Cocina Pro Admin System</p>
+        <p>Los precios FOB estan sujetos a confirmacion del proveedor. El flete es estimado basado en contenedor 20' a $1,750 USD.</p>
+    </div>
+</body>
+</html>`;
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(html);
+            printWindow.document.close();
+            printWindow.onload = function() {
+                printWindow.print();
+            };
+        }
+
+        // Productos Admin Section
+        function showSection(section) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelector(`[data-section="${section}"]`).classList.add('active');
+
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-' + section).classList.add('active');
+
+            document.getElementById('section-title').textContent =
+                section === 'container' ? 'Pedidos de Contenedor' : 'Catalogo de Productos';
+
+            if (section === 'productos') {
+                renderProductosAdmin();
+            }
+        }
+
+        function renderProductosAdmin() {
+            const search = document.getElementById('search-productos').value.toLowerCase();
+            const cat = document.getElementById('filter-cat-productos').value;
+
+            const filtered = productos.filter(p => {
+                const matchSearch = p.nombre.toLowerCase().includes(search);
+                const matchCat = !cat || p.categoria === cat;
+                return matchSearch && matchCat;
+            });
+
+            const catNames = { sarten: 'Sartenes', cuchillo: 'Cuchillos', tapa: 'Tapas', cutting: 'Cutting' };
+
+            document.getElementById('productos-table-body').innerHTML = filtered.map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td><strong>${p.nombre}</strong><br><small style="color:#666">${p.descripcion.substring(0, 50)}...</small></td>
+                    <td>${catNames[p.categoria] || p.categoria}</td>
+                    <td>$${p.fobUnidad.toFixed(2)}</td>
+                    <td>$${p.costoUnitarioCL.toFixed(2)}</td>
+                    <td>$${p.precioMinCLP.toLocaleString()}</td>
+                    <td>${p.precioMeli ? '$' + p.precioMeli.toLocaleString() : '<span style="color:#999">-</span>'}</td>
+                    <td>${p.cbmUnidad}</td>
+                    <td>${p.unidadesPorCaja}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('total-productos').textContent = productos.length;
+        }
+
+        function exportProductosJSON() {
+            const data = JSON.stringify(productos, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'cocina_pro_productos_' + new Date().toISOString().slice(0,10) + '.json';
+            link.click();
+        }
+
+        function exportProductosCSV() {
+            let csv = 'ID,Nombre,Categoria,Descripcion,FOB_USD,Costo_CL,Precio_Min_CLP,Precio_Meli,CBM,Uds_Caja\n';
+            productos.forEach(p => {
+                csv += `${p.id},"${p.nombre}",${p.categoria},"${p.descripcion.replace(/"/g, '""')}",${p.fobUnidad},${p.costoUnitarioCL},${p.precioMinCLP},${p.precioMeli || ''},${p.cbmUnidad},${p.unidadesPorCaja}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'cocina_pro_productos_' + new Date().toISOString().slice(0,10) + '.csv';
+            link.click();
+        }
+
+        // Initial render
+        renderProducts();
+        renderCart();
+        updateStats();
+    </script>
+</body>
+</html>

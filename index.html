@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COCINA PRO | Utensilios de Cocina Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="announcement-content">
+            <span class="announcement-icon">🚚</span>
+            <p>ENVÍO GRATIS en compras sobre $49.990 | <strong>Hasta 40% OFF</strong> en Sets de Cocina</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-top">
+            <div class="container header-top-content">
+                <div class="header-contact">
+                    <a href="tel:+56912345678">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        +56 9 1234 5678
+                    </a>
+                    <a href="mailto:hola@cocinapro.cl">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                        hola@cocinapro.cl
+                    </a>
+                </div>
+                <div class="header-social">
+                    <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+                    <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+                    <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg></a>
+                </div>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container header-main-content">
+                <button class="menu-toggle" aria-label="Menú" id="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <a href="/" class="logo">
+                    <span class="logo-icon">🍳</span>
+                    <div class="logo-text">
+                        <span class="logo-name">COCINA</span>
+                        <span class="logo-accent">PRO</span>
+                    </div>
+                </a>
+
+                <nav class="main-nav" id="main-nav">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                Sartenes
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            </a>
+                            <div class="mega-menu">
+                                <div class="mega-menu-content">
+                                    <div class="mega-col">
+                                        <h4>Por Material</h4>
+                                        <ul>
+                                            <li><a href="#">Aluminio Forjado</a></li>
+                                            <li><a href="#">Acero Inoxidable</a></li>
+                                            <li><a href="#">Hierro Fundido</a></li>
+                                            <li><a href="#">Cerámica</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="mega-col">
+                                        <h4>Por Característica</h4>
+                                        <ul>
+                                            <li><a href="#">Mango Desmontable</a></li>
+                                            <li><a href="#">Base Inducción</a></li>
+                                            <li><a href="#">Antiadherente Premium</a></li>
+                                            <li><a href="#">Aptas para Horno</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="mega-col">
+                                        <h4>Por Tipo</h4>
+                                        <ul>
+                                            <li><a href="#">Sartén Clásica</a></li>
+                                            <li><a href="#">Wok</a></li>
+                                            <li><a href="#">Grill</a></li>
+                                            <li><a href="#">Sets de Sartenes</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="mega-featured">
+                                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop" alt="Set de sartenes">
+                                        <div class="mega-featured-content">
+                                            <span class="mega-badge">NUEVO</span>
+                                            <h5>Set FlexiClick 3 Piezas</h5>
+                                            <p>Mango desmontable universal</p>
+                                            <span class="mega-price">$89.990</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                Ollas
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            </a>
+                            <div class="mega-menu mega-menu-small">
+                                <div class="mega-menu-content">
+                                    <div class="mega-col">
+                                        <h4>Tipos</h4>
+                                        <ul>
+                                            <li><a href="#">Ollas de Acero</a></li>
+                                            <li><a href="#">Ollas para Leche</a></li>
+                                            <li><a href="#">Hervidores</a></li>
+                                            <li><a href="#">Sets de Ollas</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                Cuchillos
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            </a>
+                            <div class="mega-menu">
+                                <div class="mega-menu-content">
+                                    <div class="mega-col">
+                                        <h4>Por Tipo</h4>
+                                        <ul>
+                                            <li><a href="#">Cuchillo Chef</a></li>
+                                            <li><a href="#">Cuchillo Santoku</a></li>
+                                            <li><a href="#">Cuchillo para Pan</a></li>
+                                            <li><a href="#">Sets Completos</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="mega-col">
+                                        <h4>Accesorios</h4>
+                                        <ul>
+                                            <li><a href="#">Afiladores</a></li>
+                                            <li><a href="#">Bloques de Madera</a></li>
+                                            <li><a href="#">Tablas de Corte</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="mega-featured">
+                                        <img src="https://images.unsplash.com/photo-1593618998160-e34014e67546?w=400&h=300&fit=crop" alt="Set de cuchillos">
+                                        <div class="mega-featured-content">
+                                            <span class="mega-badge">TOP VENTAS</span>
+                                            <h5>Set Premium 16 Piezas</h5>
+                                            <p>Acero inoxidable alemán</p>
+                                            <span class="mega-price">$129.990</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                Freidoras de Aire
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            </a>
+                            <div class="mega-menu">
+                                <div class="mega-menu-content">
+                                    <div class="mega-col">
+                                        <h4>Por Capacidad</h4>
+                                        <ul>
+                                            <li><a href="#">3.8 Litros</a></li>
+                                            <li><a href="#">5.7 Litros</a></li>
+                                            <li><a href="#">8 Litros (Doble)</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="mega-col">
+                                        <h4>Accesorios</h4>
+                                        <ul>
+                                            <li><a href="#">Moldes para Freidora</a></li>
+                                            <li><a href="#">Rejillas</a></li>
+                                            <li><a href="#">Papel Perforado</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="mega-featured">
+                                        <img src="https://images.unsplash.com/photo-1648655454543-12ac7f51dc4e?w=400&h=300&fit=crop" alt="Freidora de aire">
+                                        <div class="mega-featured-content">
+                                            <span class="mega-badge">-23%</span>
+                                            <h5>Freidora 5.7L Touch</h5>
+                                            <p>8 programas, luz interior</p>
+                                            <span class="mega-price">$99.990</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Hornear</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Parrilla</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link nav-link-sale">Ofertas</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="header-actions">
+                    <button class="action-btn search-btn" aria-label="Buscar">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                    <a href="#" class="action-btn account-btn" aria-label="Mi cuenta">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                    <button class="action-btn cart-btn" aria-label="Carrito">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span class="cart-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-slider">
+            <div class="hero-slide active">
+                <div class="hero-slide-bg">
+                    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1920&h=900&fit=crop" alt="Cocina moderna">
+                </div>
+                <div class="container hero-content">
+                    <div class="hero-text">
+                        <span class="hero-badge">Nueva Colección 2025</span>
+                        <h1 class="hero-title">
+                            Tu cocina,<br>
+                            <span class="title-accent">tu estilo</span>
+                        </h1>
+                        <p class="hero-description">
+                            Descubre nuestra línea de utensilios de cocina premium.
+                            Diseñados para quienes disfrutan cocinar en casa.
+                        </p>
+                        <div class="hero-cta">
+                            <a href="#productos" class="btn btn-primary">Ver Productos</a>
+                            <a href="#" class="btn btn-outline-light">Nueva Colección</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-features">
+            <div class="container">
+                <div class="hero-features-grid">
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="3" width="15" height="13"></rect>
+                                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                            </svg>
+                        </div>
+                        <div class="hero-feature-text">
+                            <strong>Envío Gratis</strong>
+                            <span>En compras sobre $49.990</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </div>
+                        <div class="hero-feature-text">
+                            <strong>Garantía 2 Años</strong>
+                            <span>En todos los productos</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="hero-feature-text">
+                            <strong>Soporte 24/7</strong>
+                            <span>WhatsApp y email</span>
+                        </div>
+                    </div>
+                    <div class="hero-feature">
+                        <div class="hero-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                            </svg>
+                        </div>
+                        <div class="hero-feature-text">
+                            <strong>Pago Seguro</strong>
+                            <span>Hasta 12 cuotas sin interés</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section" id="categorias">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Explora</span>
+                <h2 class="section-title">Nuestras Categorías</h2>
+                <p class="section-subtitle">Todo lo que necesitas para equipar tu cocina</p>
+            </div>
+            <div class="categories-grid">
+                <a href="#" class="category-card category-large">
+                    <img src="https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=800&h=600&fit=crop" alt="Sartenes" class="category-image">
+                    <div class="category-overlay"></div>
+                    <div class="category-content">
+                        <span class="category-count">12 productos</span>
+                        <h3 class="category-name">Sartenes</h3>
+                        <span class="category-cta">Ver colección →</span>
+                    </div>
+                </a>
+                <a href="#" class="category-card">
+                    <img src="https://images.unsplash.com/photo-1593618998160-e34014e67546?w=600&h=400&fit=crop" alt="Cuchillos" class="category-image">
+                    <div class="category-overlay"></div>
+                    <div class="category-content">
+                        <span class="category-count">8 productos</span>
+                        <h3 class="category-name">Cuchillos</h3>
+                        <span class="category-cta">Ver colección →</span>
+                    </div>
+                </a>
+                <a href="#" class="category-card">
+                    <img src="https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop" alt="Freidoras de Aire" class="category-image">
+                    <div class="category-overlay"></div>
+                    <div class="category-content">
+                        <span class="category-count">6 productos</span>
+                        <h3 class="category-name">Freidoras de Aire</h3>
+                        <span class="category-cta">Ver colección →</span>
+                    </div>
+                </a>
+                <a href="#" class="category-card">
+                    <img src="https://images.unsplash.com/photo-1556909114-44e3e70034e2?w=600&h=400&fit=crop" alt="Hornear" class="category-image">
+                    <div class="category-overlay"></div>
+                    <div class="category-content">
+                        <span class="category-count">10 productos</span>
+                        <h3 class="category-name">Hornear</h3>
+                        <span class="category-cta">Ver colección →</span>
+                    </div>
+                </a>
+                <a href="#" class="category-card category-wide">
+                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1000&h=400&fit=crop" alt="Parrilla y BBQ" class="category-image">
+                    <div class="category-overlay"></div>
+                    <div class="category-content">
+                        <span class="category-count">15 productos</span>
+                        <h3 class="category-name">Parrilla & BBQ</h3>
+                        <span class="category-cta">Ver colección →</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="products-section" id="productos">
+        <div class="container">
+            <div class="section-header section-header-flex">
+                <div>
+                    <span class="section-badge">Lo Más Vendido</span>
+                    <h2 class="section-title">Productos Destacados</h2>
+                </div>
+                <div class="section-tabs">
+                    <button class="tab-btn active" data-filter="all">Todos</button>
+                    <button class="tab-btn" data-filter="sartenes">Sartenes</button>
+                    <button class="tab-btn" data-filter="cuchillos">Cuchillos</button>
+                    <button class="tab-btn" data-filter="freidoras">Freidoras</button>
+                    <button class="tab-btn" data-filter="hornear">Hornear</button>
+                </div>
+            </div>
+            <div class="products-grid" id="products-grid">
+                <!-- Products loaded by JS -->
+            </div>
+            <div class="products-footer">
+                <a href="#" class="btn btn-outline">Ver Todos los Productos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner FlexiClick -->
+    <section class="promo-banner">
+        <div class="container">
+            <div class="promo-banner-content">
+                <div class="promo-image">
+                    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&h=500&fit=crop" alt="Sistema FlexiClick">
+                    <div class="promo-badge-float">
+                        <span class="promo-badge-icon">✨</span>
+                        <span>Patentado</span>
+                    </div>
+                </div>
+                <div class="promo-text">
+                    <span class="promo-badge">Tecnología Exclusiva</span>
+                    <h2 class="promo-title">Sistema FlexiClick</h2>
+                    <p class="promo-description">
+                        Mangos desmontables con un solo clic. Empieza en la estufa,
+                        termina en el horno. Compatible con todas nuestras sartenes
+                        y ollas.
+                    </p>
+                    <ul class="promo-features">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            Un clic para desmontar
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            Apto para horno hasta 260°C
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            Compatible con lavavajillas
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            Almacenamiento compacto
+                        </li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Descubrir FlexiClick</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lifestyle Section -->
+    <section class="lifestyle-section">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-badge">Inspiración</span>
+                <h2 class="section-title">Cocina con Estilo</h2>
+                <p class="section-subtitle">Momentos especiales empiezan en tu cocina</p>
+            </div>
+            <div class="lifestyle-grid">
+                <div class="lifestyle-card lifestyle-large">
+                    <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&h=600&fit=crop" alt="Familia cocinando">
+                    <div class="lifestyle-content">
+                        <h3>Momentos en Familia</h3>
+                        <p>Crea recuerdos inolvidables cocinando juntos</p>
+                    </div>
+                </div>
+                <div class="lifestyle-card">
+                    <img src="https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?w=600&h=400&fit=crop" alt="Chef profesional">
+                    <div class="lifestyle-content">
+                        <h3>Calidad Profesional</h3>
+                        <p>Herramientas de chef para tu hogar</p>
+                    </div>
+                </div>
+                <div class="lifestyle-card">
+                    <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&h=400&fit=crop" alt="Cocina saludable">
+                    <div class="lifestyle-content">
+                        <h3>Cocina Saludable</h3>
+                        <p>Menos aceite, más sabor con las freidoras de aire</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Air Fryer Feature -->
+    <section class="feature-section">
+        <div class="container">
+            <div class="feature-grid">
+                <div class="feature-images">
+                    <div class="feature-image-main">
+                        <img src="https://images.unsplash.com/photo-1648655454543-12ac7f51dc4e?w=600&h=600&fit=crop" alt="Freidora de Aire">
+                    </div>
+                    <div class="feature-image-small">
+                        <img src="https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=300&h=300&fit=crop" alt="Comida saludable">
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <span class="section-badge">Nueva Línea</span>
+                    <h2 class="section-title">Freidoras de Aire</h2>
+                    <p class="feature-description">
+                        Cocina saludable sin sacrificar el sabor. Pantalla táctil,
+                        8 programas preestablecidos y canasta transparente para
+                        ver tu comida mientras se cocina.
+                    </p>
+                    <div class="feature-specs">
+                        <div class="spec">
+                            <span class="spec-value">1500W</span>
+                            <span class="spec-label">Potencia</span>
+                        </div>
+                        <div class="spec">
+                            <span class="spec-value">8</span>
+                            <span class="spec-label">Programas</span>
+                        </div>
+                        <div class="spec">
+                            <span class="spec-value">200°C</span>
+                            <span class="spec-label">Temp. Máx</span>
+                        </div>
+                    </div>
+                    <div class="feature-sizes">
+                        <span class="sizes-label">Tamaños disponibles:</span>
+                        <div class="size-options">
+                            <button class="size-btn active">3.8L</button>
+                            <button class="size-btn">5.7L</button>
+                            <button class="size-btn">8L Doble</button>
+                        </div>
+                    </div>
+                    <div class="feature-colors">
+                        <span class="colors-label">Colores:</span>
+                        <div class="color-options">
+                            <button class="color-btn active" style="--color: #1a1a1a" title="Negro"></button>
+                            <button class="color-btn" style="--color: #f5f5f5" title="Blanco"></button>
+                            <button class="color-btn" style="--color: #c41e3a" title="Rojo"></button>
+                            <button class="color-btn" style="--color: #2563eb" title="Azul"></button>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-primary">Ver Freidoras</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-badge">Testimonios</span>
+                <h2 class="section-title">Lo Que Dicen Nuestros Clientes</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="María Rodríguez" class="testimonial-avatar">
+                        <div>
+                            <h4 class="testimonial-name">María Rodríguez</h4>
+                            <span class="testimonial-location">Santiago, Chile</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating">★★★★★</div>
+                    <p class="testimonial-text">
+                        "Las sartenes con mango desmontable cambiaron mi forma de cocinar.
+                        Del fuego al horno sin problemas. La calidad es impresionante."
+                    </p>
+                    <span class="testimonial-product">Set Sartenes FlexiClick</span>
+                </div>
+                <div class="testimonial-card featured">
+                    <div class="testimonial-header">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" alt="Carlos López" class="testimonial-avatar">
+                        <div>
+                            <h4 class="testimonial-name">Carlos López</h4>
+                            <span class="testimonial-location">Viña del Mar, Chile</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating">★★★★★</div>
+                    <p class="testimonial-text">
+                        "La freidora de aire de 8L con doble canasta es perfecta para mi familia.
+                        Cocino dos cosas diferentes al mismo tiempo. El control de temperatura
+                        independiente es genial."
+                    </p>
+                    <span class="testimonial-product">Freidora de Aire 8L Doble</span>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop" alt="Patricia González" class="testimonial-avatar">
+                        <div>
+                            <h4 class="testimonial-name">Patricia González</h4>
+                            <span class="testimonial-location">Concepción, Chile</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating">★★★★★</div>
+                    <p class="testimonial-text">
+                        "Los cuchillos de acero inoxidable alemán son una maravilla.
+                        El afilador incluido mantiene el filo perfecto. Vale cada peso."
+                    </p>
+                    <span class="testimonial-product">Set Cuchillos 16 Piezas</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-card">
+                <div class="newsletter-content">
+                    <div class="newsletter-icon">📬</div>
+                    <h2 class="newsletter-title">Únete a Nuestra Comunidad</h2>
+                    <p class="newsletter-description">
+                        Recibe ofertas exclusivas, recetas y tips de cocina directamente en tu email.
+                    </p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Tu correo electrónico" required>
+                        <button type="submit" class="btn btn-primary">Suscribirse</button>
+                    </form>
+                    <p class="newsletter-disclaimer">
+                        Al suscribirte aceptas recibir emails promocionales. Puedes cancelar cuando quieras.
+                    </p>
+                </div>
+                <div class="newsletter-image">
+                    <img src="https://images.unsplash.com/photo-1556909114-44e3e70034e2?w=500&h=400&fit=crop" alt="Cocinando">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <span class="logo-icon">🍳</span>
+                        <div class="logo-text">
+                            <span class="logo-name">COCINA</span>
+                            <span class="logo-accent">PRO</span>
+                        </div>
+                    </a>
+                    <p class="footer-description">
+                        Utensilios de cocina premium diseñados para quienes aman cocinar.
+                        Calidad, diseño y funcionalidad para tu hogar.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        </a>
+                        <a href="#" aria-label="Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        </a>
+                        <a href="#" aria-label="YouTube">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                        </a>
+                        <a href="#" aria-label="TikTok">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Productos</h4>
+                    <ul>
+                        <li><a href="#">Sartenes</a></li>
+                        <li><a href="#">Ollas</a></li>
+                        <li><a href="#">Cuchillos</a></li>
+                        <li><a href="#">Freidoras de Aire</a></li>
+                        <li><a href="#">Hornear</a></li>
+                        <li><a href="#">Parrilla</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Ayuda</h4>
+                    <ul>
+                        <li><a href="#">Centro de Ayuda</a></li>
+                        <li><a href="#">Envíos y Entregas</a></li>
+                        <li><a href="#">Devoluciones</a></li>
+                        <li><a href="#">Garantía</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="#">Sobre Nosotros</a></li>
+                        <li><a href="#">Blog de Cocina</a></li>
+                        <li><a href="#">Trabaja con Nosotros</a></li>
+                        <li><a href="#">Mayoristas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contacto</h4>
+                    <ul class="contact-info">
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            +56 9 1234 5678
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            hola@cocinapro.cl
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Lun-Vie 9:00-18:00
+                        </li>
+                    </ul>
+                    <div class="payment-methods">
+                        <span>Medios de pago:</span>
+                        <div class="payment-icons">
+                            <img src="https://cdn.jsdelivr.net/gh/nicholaswindrow/stripe-badge@master/visa.svg" alt="Visa" height="24">
+                            <img src="https://cdn.jsdelivr.net/gh/nicholaswindrow/stripe-badge@master/mastercard.svg" alt="Mastercard" height="24">
+                            <img src="https://cdn.jsdelivr.net/gh/nicholaswindrow/stripe-badge@master/amex.svg" alt="American Express" height="24">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 COCINA PRO. Todos los derechos reservados.</p>
+                <div class="footer-legal">
+                    <a href="#">Términos y Condiciones</a>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Política de Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Tu Carrito</h3>
+            <button class="cart-close" aria-label="Cerrar carrito">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="cart-body" id="cart-items">
+            <div class="cart-empty">
+                <div class="cart-empty-icon">🛒</div>
+                <p>Tu carrito está vacío</p>
+                <a href="#productos" class="btn btn-primary" onclick="closeCart()">Ver Productos</a>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-subtotal">
+                <span>Subtotal</span>
+                <span class="subtotal-amount">$0</span>
+            </div>
+            <button class="btn btn-primary btn-block">Ir al Checkout</button>
+            <p class="cart-note">Envío calculado en el checkout</p>
+        </div>
+    </div>
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <!-- Search Modal -->
+    <div class="search-modal" id="search-modal">
+        <div class="search-modal-content">
+            <button class="search-modal-close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <form class="search-form">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="search" placeholder="¿Qué estás buscando?" autofocus>
+            </form>
+            <div class="search-suggestions">
+                <h4>Búsquedas populares</h4>
+                <div class="suggestion-tags">
+                    <a href="#">Sartén antiadherente</a>
+                    <a href="#">Freidora de aire</a>
+                    <a href="#">Set cuchillos</a>
+                    <a href="#">Mango desmontable</a>
+                    <a href="#">Wok</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
