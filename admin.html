@@ -996,12 +996,10 @@
             grid.innerHTML = filtered.map(p => {
                 const inCart = cart[p.id];
                 const hasMeli = p.precioMeli !== null;
-                const imgHtml = p.imagen
-                    ? `<img src="${p.imagen}" alt="${p.nombre}" onerror="this.parentElement.innerHTML='<div class=placeholder>${p.codigo || p.nombre}</div>'"><a href="images/${p.pdf}" target="_blank" class="pdf-link">PDF</a>`
-                    : `<div class="placeholder">${p.codigo || p.nombre}</div>`;
+                const pdfLink = p.pdf ? `<a href="images/${p.pdf}" target="_blank" class="pdf-link">Ver PDF</a>` : '';
                 return `
                     <div class="product-card ${inCart ? 'in-cart' : ''}">
-                        <div class="product-img">${imgHtml}</div>
+                        <div class="product-img"><div class="placeholder">${p.codigo || ''}</div>${pdfLink}</div>
                         ${p.codigo ? `<div class="product-code">${p.codigo}</div>` : ''}
                         <div class="product-name">${p.nombre}</div>
                         <div class="product-desc">${p.descripcion}</div>

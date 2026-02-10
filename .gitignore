@@ -1,4 +1,13 @@
 node_modules/
 .vercel/
 *.pdf
+*.zip
+*.pptx
+*.png
 productos_data.json
+_ul*
+*.bat
+*.sh
+extract-*.js
+pptx-workspace/
+package-lock.json
