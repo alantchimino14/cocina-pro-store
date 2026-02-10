@@ -66,7 +66,12 @@
         .product-card:hover { border-color: #e94560; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .product-card.in-cart { border-color: #27ae60; background: #f0fff4; }
 
-        .product-img { width: 100%; height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; margin-bottom: 10px; text-align: center; padding: 8px; }
+        .product-img { width: 100%; height: 120px; background: #f8f8f8; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #666; font-size: 0.75rem; margin-bottom: 10px; text-align: center; padding: 8px; overflow: hidden; position: relative; }
+        .product-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .product-img .placeholder { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 8px; border-radius: 4px; }
+        .product-img .pdf-link { position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.7); color: white; padding: 3px 6px; border-radius: 3px; font-size: 0.65rem; text-decoration: none; }
+        .product-img .pdf-link:hover { background: #e94560; }
+        .product-code { font-size: 0.7rem; color: #888; margin-bottom: 5px; }
         .product-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; line-height: 1.3; }
         .product-desc { font-size: 0.7rem; color: #666; margin-bottom: 10px; max-height: 40px; overflow: hidden; }
 
@@ -546,7 +551,7 @@
                         <table class="data-table" id="productos-table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Codigo</th>
                                     <th>Producto</th>
                                     <th>Categoria</th>
                                     <th>FOB (USD)</th>
@@ -554,7 +559,7 @@
                                     <th>Precio Min</th>
                                     <th>Ref. Meli</th>
                                     <th>CBM</th>
-                                    <th>Uds/Caja</th>
+                                    <th>PDF</th>
                                 </tr>
                             </thead>
                             <tbody id="productos-table-body"></tbody>
@@ -582,6 +587,7 @@
         const productos = [
             {
                 id: 1,
+                codigo: "P002",
                 nombre: "Set Sartenes 4pcs (20-24-26cm + mango)",
                 categoria: "sarten",
                 descripcion: "Interior: 3 capas con circulo temperatura. Exterior: negro resistente al calor. Base induccion.",
@@ -591,10 +597,13 @@
                 costoUnitarioCL: 17.99,
                 precioMinVenta: 31.49,
                 precioMinCLP: 35599,
-                precioMeli: 69990
+                precioMeli: 69990,
+                pdf: "P002 - Aluminum Pan (v02.3).pdf",
+                imagen: "images/products/set-sartenes-4pcs.png"
             },
             {
                 id: 2,
+                codigo: "P026",
                 nombre: "Set Cuchillos 16pcs con Bloque",
                 categoria: "cuchillo",
                 descripcion: "8'' chef, 8'' carving, 5'' santoku, 5'' utility, 3.5'' paring, 6x steak, tijera, afilador, bloque pino",
@@ -604,10 +613,13 @@
                 costoUnitarioCL: 27.77,
                 precioMinVenta: 48.60,
                 precioMinCLP: 54940,
-                precioMeli: 69990
+                precioMeli: 69990,
+                pdf: "P026 - Knife (v02).pdf",
+                imagen: "images/products/set-cuchillos-16pcs.png"
             },
             {
                 id: 3,
+                codigo: "S008",
                 nombre: "Afilador de Cuchillos",
                 categoria: "cuchillo",
                 descripcion: "ABS/TPE/Tungsten Steel/Diamond rod/Ceramic. Para cuchillos normales, tijeras y serrados",
@@ -617,10 +629,13 @@
                 costoUnitarioCL: 3.79,
                 precioMinVenta: 6.64,
                 precioMinCLP: 7507,
-                precioMeli: 12990
+                precioMeli: 12990,
+                pdf: "S008 - Knife Sharpener - RED (v01).pdf",
+                imagen: "images/products/afilador-cuchillos.png"
             },
             {
                 id: 4,
+                codigo: "DXD57",
                 nombre: "Kit Cuchillo y Tenedor BBQ",
                 categoria: "cutting",
                 descripcion: "Cuchillo ss2cr13 1.2mm + Tenedor ss2cr13 1.5mm. Mango rubber wood",
@@ -630,10 +645,13 @@
                 costoUnitarioCL: 1.77,
                 precioMinVenta: 3.10,
                 precioMinCLP: 3500,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "DXD57 - Knife and Fork - Stolf (v01).pdf",
+                imagen: "images/products/kit-cuchillo-tenedor.png"
             },
             {
                 id: 5,
+                codigo: "DXD58",
                 nombre: "Tabla de Cortar Bambu",
                 categoria: "cutting",
                 descripcion: "Material: ABS + bambu. Tabla 40x20x1cm",
@@ -643,10 +661,13 @@
                 costoUnitarioCL: 3.48,
                 precioMinVenta: 6.09,
                 precioMinCLP: 6884,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "DXD58 - Cutting Board Smart - Zesthome (v01).pdf",
+                imagen: "images/products/tabla-cortar-bambu.png"
             },
             {
                 id: 6,
+                codigo: "DXD58",
                 nombre: "Kit Tabla + Cuchillo + Tenedor",
                 categoria: "cutting",
                 descripcion: "Set completo: tabla bambu 40x20cm + cuchillo + tenedor",
@@ -656,10 +677,13 @@
                 costoUnitarioCL: 5.31,
                 precioMinVenta: 9.29,
                 precioMinCLP: 10504,
-                precioMeli: 19990
+                precioMeli: 19990,
+                pdf: "DXD58 - Cutting Board Smart - Zesthome (v01).pdf",
+                imagen: "images/products/kit-tabla-cuchillo-tenedor.png"
             },
             {
                 id: 7,
+                codigo: "P097",
                 nombre: "Special Cut Knives 2pcs",
                 categoria: "cuchillo",
                 descripcion: "Set 2 cuchillos: 8'' chef + 8'' carving. Mango PP/TPR. Acero 3Cr13. Caja magnetica",
@@ -669,10 +693,13 @@
                 costoUnitarioCL: 3.96,
                 precioMinVenta: 6.92,
                 precioMinCLP: 7825,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "P097 - German Knife (v01).pdf",
+                imagen: "images/products/special-cut-knives.png"
             },
             {
                 id: 8,
+                codigo: "P097",
                 nombre: "Professional Cut Knives 2pcs",
                 categoria: "cuchillo",
                 descripcion: "Set 2 cuchillos: 8'' chef + 8'' carving. Mango acero hueco. Acero 5Cr15Mov",
@@ -682,10 +709,13 @@
                 costoUnitarioCL: 7.47,
                 precioMinVenta: 13.06,
                 precioMinCLP: 14770,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "P097 - German Knife (v01).pdf",
+                imagen: "images/products/professional-cut-knives.png"
             },
             {
                 id: 9,
+                codigo: "P097",
                 nombre: "German Steel Knives 2pcs",
                 categoria: "cuchillo",
                 descripcion: "Set 2 cuchillos: 8'' chef + 8'' carving. Acero Aleman 1.4116. Mango SS430",
@@ -695,10 +725,13 @@
                 costoUnitarioCL: 8.64,
                 precioMinVenta: 15.11,
                 precioMinCLP: 17084,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "P097 - German Knife (v01).pdf",
+                imagen: "images/products/german-steel-knives.png"
             },
             {
                 id: 10,
+                codigo: "P026",
                 nombre: "Portacuchillos Madera Magnetico",
                 categoria: "cuchillo",
                 descripcion: "Iman fuerte 25cm. Madera Acacia. Base 26x10x2cm. Peso 1400g",
@@ -708,10 +741,13 @@
                 costoUnitarioCL: 10.94,
                 precioMinVenta: 19.15,
                 precioMinCLP: 21650,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "P026 - Knife (v02).pdf",
+                imagen: "images/products/portacuchillos-madera.png"
             },
             {
                 id: 11,
+                codigo: "S001",
                 nombre: "Olla 16cm Saucepan",
                 categoria: "sarten",
                 descripcion: "Interior Teflon 3 capas. Exterior negro mate. Mango bakelita soft touch. Base induccion",
@@ -721,10 +757,13 @@
                 costoUnitarioCL: 7.52,
                 precioMinVenta: 13.15,
                 precioMinCLP: 14869,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S001 - Skillet with fixed handle (v02).pdf",
+                imagen: "images/products/olla-16cm.png"
             },
             {
                 id: 12,
+                codigo: "S045",
                 nombre: "Sarten 20cm Frying Pan",
                 categoria: "sarten",
                 descripcion: "Interior Teflon 3 capas. Exterior negro mate. Mango bakelita soft touch. Base induccion",
@@ -734,10 +773,13 @@
                 costoUnitarioCL: 7.91,
                 precioMinVenta: 13.85,
                 precioMinCLP: 15658,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S045 - Fry Pan Set - Hausklein (v01).pdf",
+                imagen: "images/products/sarten-20cm.png"
             },
             {
                 id: 13,
+                codigo: "S045",
                 nombre: "Sarten 24cm Frying Pan",
                 categoria: "sarten",
                 descripcion: "Interior Teflon 3 capas. Exterior negro mate. Mango bakelita soft touch. Base induccion",
@@ -747,10 +789,13 @@
                 costoUnitarioCL: 9.15,
                 precioMinVenta: 16.01,
                 precioMinCLP: 18096,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S045 - Fry Pan Set - Hausklein (v01).pdf",
+                imagen: "images/products/sarten-24cm.png"
             },
             {
                 id: 14,
+                codigo: "S046",
                 nombre: "Sarten Honda 24cm Deep",
                 categoria: "sarten",
                 descripcion: "Interior Teflon 3 capas. Exterior negro mate. Mango bakelita soft touch. Base induccion",
@@ -760,10 +805,13 @@
                 costoUnitarioCL: 10.53,
                 precioMinVenta: 18.42,
                 precioMinCLP: 20826,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S046 - Pan Set - Hausklein (v01).pdf",
+                imagen: "images/products/sarten-honda-24cm.png"
             },
             {
                 id: 15,
+                codigo: "S046",
                 nombre: "Sarten Honda 28cm Deep",
                 categoria: "sarten",
                 descripcion: "Interior Teflon 3 capas. Exterior negro mate. Mango bakelita soft touch. Base induccion",
@@ -773,10 +821,13 @@
                 costoUnitarioCL: 12.52,
                 precioMinVenta: 21.91,
                 precioMinCLP: 24771,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S046 - Pan Set - Hausklein (v01).pdf",
+                imagen: "images/products/sarten-honda-28cm.png"
             },
             {
                 id: 16,
+                codigo: "S046",
                 nombre: "Cacerola 24cm Casserole",
                 categoria: "sarten",
                 descripcion: "Interior Teflon 3 capas. Exterior negro mate. 2 asas bakelita. Base induccion",
@@ -786,10 +837,13 @@
                 costoUnitarioCL: 12.58,
                 precioMinVenta: 22.02,
                 precioMinCLP: 24893,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S046 - Pan Set - Hausklein (v01).pdf",
+                imagen: "images/products/cacerola-24cm.png"
             },
             {
                 id: 17,
+                codigo: "S046",
                 nombre: "Cacerola 28cm Casserole",
                 categoria: "sarten",
                 descripcion: "Interior Teflon 3 capas. Exterior negro mate. 2 asas bakelita. Base induccion",
@@ -799,10 +853,13 @@
                 costoUnitarioCL: 15.23,
                 precioMinVenta: 26.65,
                 precioMinCLP: 30129,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S046 - Pan Set - Hausklein (v01).pdf",
+                imagen: "images/products/cacerola-28cm.png"
             },
             {
                 id: 18,
+                codigo: "S001",
                 nombre: "Milk Pan / Olla Leche",
                 categoria: "sarten",
                 descripcion: "Interior PFLUON 3 capas. Exterior negro mate. Mango bakelita azul. Base induccion",
@@ -812,10 +869,13 @@
                 costoUnitarioCL: 4.15,
                 precioMinVenta: 7.26,
                 precioMinCLP: 8211,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S001 - Skillet with fixed handle (v02).pdf",
+                imagen: "images/products/milk-pan.png"
             },
             {
                 id: 19,
+                codigo: "S002",
                 nombre: "Tapa Vidrio 16cm",
                 categoria: "tapa",
                 descripcion: "Vidrio templado, aro acero inox, pomo bakelita soft touch",
@@ -825,10 +885,13 @@
                 costoUnitarioCL: 1.98,
                 precioMinVenta: 3.47,
                 precioMinCLP: 3922,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S002 - Unified Lid (v02).pdf",
+                imagen: "images/products/tapa-vidrio-16cm.png"
             },
             {
                 id: 20,
+                codigo: "S002",
                 nombre: "Tapa Vidrio 20cm",
                 categoria: "tapa",
                 descripcion: "Vidrio templado, aro acero inox, pomo bakelita soft touch",
@@ -838,10 +901,13 @@
                 costoUnitarioCL: 2.17,
                 precioMinVenta: 3.80,
                 precioMinCLP: 4293,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S002 - Unified Lid (v02).pdf",
+                imagen: "images/products/tapa-vidrio-20cm.png"
             },
             {
                 id: 21,
+                codigo: "S002",
                 nombre: "Tapa Vidrio 24cm",
                 categoria: "tapa",
                 descripcion: "Vidrio templado, aro acero inox, pomo bakelita soft touch",
@@ -851,10 +917,13 @@
                 costoUnitarioCL: 2.50,
                 precioMinVenta: 4.37,
                 precioMinCLP: 4945,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S002 - Unified Lid (v02).pdf",
+                imagen: "images/products/tapa-vidrio-24cm.png"
             },
             {
                 id: 22,
+                codigo: "S002",
                 nombre: "Tapa Vidrio 28cm",
                 categoria: "tapa",
                 descripcion: "Vidrio templado, aro acero inox, pomo bakelita soft touch",
@@ -864,10 +933,13 @@
                 costoUnitarioCL: 2.84,
                 precioMinVenta: 4.97,
                 precioMinCLP: 5613,
-                precioMeli: null
+                precioMeli: null,
+                pdf: "S002 - Unified Lid (v02).pdf",
+                imagen: "images/products/tapa-vidrio-28cm.png"
             },
             {
                 id: 23,
+                codigo: "P002",
                 nombre: "Set Forjado 5pcs Ceramica",
                 categoria: "sarten",
                 descripcion: "20cm fry, 24cm wok, 20cm sauce, 20cm tapa, mango desmontable. Ceramica marble coating",
@@ -877,7 +949,9 @@
                 costoUnitarioCL: 20.22,
                 precioMinVenta: 35.39,
                 precioMinCLP: 40012,
-                precioMeli: 127000
+                precioMeli: 127000,
+                pdf: "P002 - Aluminum Pan (v02.3).pdf",
+                imagen: "images/products/set-forjado-5pcs.png"
             }
         ];
 
@@ -922,9 +996,13 @@
             grid.innerHTML = filtered.map(p => {
                 const inCart = cart[p.id];
                 const hasMeli = p.precioMeli !== null;
+                const imgHtml = p.imagen
+                    ? `<img src="${p.imagen}" alt="${p.nombre}" onerror="this.parentElement.innerHTML='<div class=placeholder>${p.codigo || p.nombre}</div>'"><a href="images/${p.pdf}" target="_blank" class="pdf-link">PDF</a>`
+                    : `<div class="placeholder">${p.codigo || p.nombre}</div>`;
                 return `
                     <div class="product-card ${inCart ? 'in-cart' : ''}">
-                        <div class="product-img">${p.nombre}</div>
+                        <div class="product-img">${imgHtml}</div>
+                        ${p.codigo ? `<div class="product-code">${p.codigo}</div>` : ''}
                         <div class="product-name">${p.nombre}</div>
                         <div class="product-desc">${p.descripcion}</div>
                         <div class="product-specs">
@@ -1395,7 +1473,7 @@
 
             document.getElementById('productos-table-body').innerHTML = filtered.map(p => `
                 <tr>
-                    <td>${p.id}</td>
+                    <td><strong>${p.codigo || '-'}</strong></td>
                     <td><strong>${p.nombre}</strong><br><small style="color:#666">${p.descripcion.substring(0, 50)}...</small></td>
                     <td>${catNames[p.categoria] || p.categoria}</td>
                     <td>$${p.fobUnidad.toFixed(2)}</td>
@@ -1403,7 +1481,7 @@
                     <td>$${p.precioMinCLP.toLocaleString()}</td>
                     <td>${p.precioMeli ? '$' + p.precioMeli.toLocaleString() : '<span style="color:#999">-</span>'}</td>
                     <td>${p.cbmUnidad}</td>
-                    <td>${p.unidadesPorCaja}</td>
+                    <td>${p.pdf ? '<a href="images/' + p.pdf + '" target="_blank" style="color:#3498db;">Ver</a>' : '-'}</td>
                 </tr>
             `).join('');
 

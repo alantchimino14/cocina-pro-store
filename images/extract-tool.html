@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extractor de Imagenes PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #1a1a2e; color: white; min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { margin-bottom: 20px; color: #e94560; }
+        .info { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .upload-area { border: 2px dashed #555; border-radius: 8px; padding: 40px; text-align: center; margin-bottom: 20px; cursor: pointer; transition: all 0.3s; }
+        .upload-area:hover { border-color: #e94560; background: rgba(233,69,96,0.1); }
+        .upload-area.dragover { border-color: #e94560; background: rgba(233,69,96,0.2); }
+        input[type="file"] { display: none; }
+        .btn { background: #e94560; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 5px; }
+        .btn:hover { background: #d63d56; }
+        .btn:disabled { background: #555; cursor: not-allowed; }
+        .btn-secondary { background: #3498db; }
+        .progress { height: 20px; background: #333; border-radius: 10px; margin: 20px 0; overflow: hidden; }
+        .progress-bar { height: 100%; background: #27ae60; transition: width 0.3s; }
+        .results { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .result-item { background: #2a2a3e; border-radius: 8px; overflow: hidden; }
+        .result-item img { width: 100%; height: 150px; object-fit: contain; background: white; }
+        .result-item .info { padding: 10px; font-size: 0.8rem; }
+        .result-item .name { font-weight: 600; margin-bottom: 5px; word-break: break-all; }
+        .result-item a { color: #3498db; text-decoration: none; }
+        .status { padding: 10px; background: rgba(255,255,255,0.05); border-radius: 6px; margin: 10px 0; }
+        .log { background: #111; padding: 15px; border-radius: 8px; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 0.85rem; margin-top: 20px; }
+        .log-entry { padding: 3px 0; }
+        .log-entry.error { color: #e74c3c; }
+        .log-entry.success { color: #27ae60; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Extractor de Imagenes PDF</h1>
+
+        <div class="info">
+            <p>Esta herramienta extrae la primera pagina de cada PDF y la convierte en imagen PNG.</p>
+            <p>Selecciona los PDFs de la carpeta <code>images/</code> o arrastralos aqui.</p>
+        </div>
+
+        <div class="upload-area" id="dropZone">
+            <p>Arrastra PDFs aqui o haz clic para seleccionar</p>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 10px;">Soporta multiples archivos</p>
+            <input type="file" id="fileInput" accept=".pdf" multiple>
+        </div>
+
+        <div>
+            <button class="btn" id="extractBtn" disabled>Extraer Imagenes</button>
+            <button class="btn btn-secondary" id="downloadAllBtn" disabled>Descargar Todo (ZIP)</button>
+            <button class="btn btn-secondary" id="clearBtn">Limpiar</button>
+        </div>
+
+        <div class="progress" style="display: none;" id="progressContainer">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+        </div>
+
+        <div class="status" id="status">Esperando archivos...</div>
+
+        <div class="results" id="results"></div>
+
+        <div class="log" id="log"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const extractBtn = document.getElementById('extractBtn');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const status = document.getElementById('status');
+        const results = document.getElementById('results');
+        const log = document.getElementById('log');
+
+        let pdfFiles = [];
+        let extractedImages = [];
+
+        // Drag and drop
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        function handleFiles(files) {
+            const newFiles = Array.from(files).filter(f => f.type === 'application/pdf');
+            pdfFiles = [...pdfFiles, ...newFiles];
+            updateStatus();
+            addLog(`Agregados ${newFiles.length} archivos PDF`);
+        }
+
+        function updateStatus() {
+            status.textContent = `${pdfFiles.length} PDFs listos para procesar`;
+            extractBtn.disabled = pdfFiles.length === 0;
+        }
+
+        function addLog(message, type = '') {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry ' + type;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.insertBefore(entry, log.firstChild);
+        }
+
+        clearBtn.addEventListener('click', () => {
+            pdfFiles = [];
+            extractedImages = [];
+            results.innerHTML = '';
+            updateStatus();
+            downloadAllBtn.disabled = true;
+            addLog('Limpiado');
+        });
+
+        extractBtn.addEventListener('click', async () => {
+            if (pdfFiles.length === 0) return;
+
+            extractBtn.disabled = true;
+            progressContainer.style.display = 'block';
+            extractedImages = [];
+            results.innerHTML = '';
+
+            for (let i = 0; i < pdfFiles.length; i++) {
+                const file = pdfFiles[i];
+                const progress = ((i + 1) / pdfFiles.length) * 100;
+                progressBar.style.width = progress + '%';
+                status.textContent = `Procesando ${i + 1}/${pdfFiles.length}: ${file.name}`;
+
+                try {
+                    const imageData = await extractFirstPage(file);
+                    extractedImages.push({
+                        name: file.name.replace('.pdf', '.png'),
+                        data: imageData
+                    });
+                    displayResult(file.name, imageData);
+                    addLog(`OK: ${file.name}`, 'success');
+                } catch (err) {
+                    addLog(`ERROR: ${file.name} - ${err.message}`, 'error');
+                }
+            }
+
+            status.textContent = `Completado: ${extractedImages.length}/${pdfFiles.length} imagenes extraidas`;
+            extractBtn.disabled = false;
+            downloadAllBtn.disabled = extractedImages.length === 0;
+        });
+
+        async function extractFirstPage(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            const page = await pdf.getPage(1);
+
+            const scale = 2; // Alta resolucion
+            const viewport = page.getViewport({ scale });
+
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+
+            const context = canvas.getContext('2d');
+            context.fillStyle = 'white';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            await page.render({
+                canvasContext: context,
+                viewport: viewport
+            }).promise;
+
+            return canvas.toDataURL('image/png');
+        }
+
+        function displayResult(filename, dataUrl) {
+            const item = document.createElement('div');
+            item.className = 'result-item';
+            item.innerHTML = `
+                <img src="${dataUrl}" alt="${filename}">
+                <div class="info">
+                    <div class="name">${filename.replace('.pdf', '.png')}</div>
+                    <a href="${dataUrl}" download="${filename.replace('.pdf', '.png')}">Descargar</a>
+                </div>
+            `;
+            results.appendChild(item);
+        }
+
+        downloadAllBtn.addEventListener('click', async () => {
+            if (extractedImages.length === 0) return;
+
+            downloadAllBtn.disabled = true;
+            status.textContent = 'Creando ZIP...';
+
+            const zip = new JSZip();
+            const folder = zip.folder('products');
+
+            for (const img of extractedImages) {
+                const base64 = img.data.split(',')[1];
+                folder.file(img.name, base64, { base64: true });
+            }
+
+            const blob = await zip.generateAsync({ type: 'blob' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'product-images.zip';
+            link.click();
+
+            downloadAllBtn.disabled = false;
+            status.textContent = `ZIP descargado con ${extractedImages.length} imagenes`;
+            addLog('ZIP descargado', 'success');
+        });
+    </script>
+</body>
+</html>
