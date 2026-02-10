@@ -996,10 +996,14 @@
             grid.innerHTML = filtered.map(p => {
                 const inCart = cart[p.id];
                 const hasMeli = p.precioMeli !== null;
-                const pdfLink = p.pdf ? `<a href="images/${p.pdf}" target="_blank" class="pdf-link">Ver PDF</a>` : '';
+                const pdfLink = p.pdf ? `<a href="images/${p.pdf}" target="_blank" class="pdf-link">PDF</a>` : '';
+                const hasImage = p.imagen && !p.imagen.includes('cuchillo') && !p.imagen.includes('knife') && !p.imagen.includes('cutting') && !p.imagen.includes('tabla') && !p.imagen.includes('portacuchillo') && !p.imagen.includes('afilador');
+                const imgContent = hasImage
+                    ? `<img src="${p.imagen}" alt="${p.nombre}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"><div class="placeholder" style="display:none">${p.codigo || ''}</div>${pdfLink}`
+                    : `<div class="placeholder">${p.codigo || ''}</div>${pdfLink}`;
                 return `
                     <div class="product-card ${inCart ? 'in-cart' : ''}">
-                        <div class="product-img"><div class="placeholder">${p.codigo || ''}</div>${pdfLink}</div>
+                        <div class="product-img">${imgContent}</div>
                         ${p.codigo ? `<div class="product-code">${p.codigo}</div>` : ''}
                         <div class="product-name">${p.nombre}</div>
                         <div class="product-desc">${p.descripcion}</div>

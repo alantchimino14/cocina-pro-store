@@ -3,11 +3,15 @@ node_modules/
 *.pdf
 *.zip
 *.pptx
-*.png
 productos_data.json
 _ul*
 *.bat
 *.sh
 extract-*.js
+scrape-*.js
+download-*.js
 pptx-workspace/
 package-lock.json
+Onepager.png
+# Allow product images
+!images/products/*.png
