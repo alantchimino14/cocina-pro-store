@@ -997,8 +997,7 @@
                 const inCart = cart[p.id];
                 const hasMeli = p.precioMeli !== null;
                 const pdfLink = p.pdf ? `<a href="images/${p.pdf}" target="_blank" class="pdf-link">PDF</a>` : '';
-                const hasImage = p.imagen && !p.imagen.includes('cuchillo') && !p.imagen.includes('knife') && !p.imagen.includes('cutting') && !p.imagen.includes('tabla') && !p.imagen.includes('portacuchillo') && !p.imagen.includes('afilador');
-                const imgContent = hasImage
+                const imgContent = p.imagen
                     ? `<img src="${p.imagen}" alt="${p.nombre}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"><div class="placeholder" style="display:none">${p.codigo || ''}</div>${pdfLink}`
                     : `<div class="placeholder">${p.codigo || ''}</div>${pdfLink}`;
                 return `
@@ -1008,7 +1007,7 @@
                         <div class="product-name">${p.nombre}</div>
                         <div class="product-desc">${p.descripcion}</div>
                         <div class="product-specs">
-                            <div class="spec"><span class="spec-label">CBM/caja:</span> <span class="spec-value">${(p.cbmUnidad * p.unidadesPorCaja).toFixed(3)}</span></div>
+                            <div class="spec"><span class="spec-label">CBM/caja:</span> <span class="spec-value">${p.cbmUnidad.toFixed(3)}</span></div>
                             <div class="spec"><span class="spec-label">Uds/caja:</span> <span class="spec-value">${p.unidadesPorCaja}</span></div>
                             <div class="spec"><span class="spec-label">FOB/ud:</span> <span class="spec-value">${formatUSD(p.fobUnidad)}</span></div>
                             <div class="spec"><span class="spec-label">Costo CL:</span> <span class="spec-value">${formatUSD(p.costoUnitarioCL)}</span></div>
@@ -1100,7 +1099,7 @@
             Object.keys(cart).forEach(id => {
                 const p = productos.find(prod => prod.id == id);
                 const cajas = cart[id];
-                totalVolume += cajas * p.cbmUnidad * p.unidadesPorCaja;
+                totalVolume += cajas * p.cbmUnidad;
                 totalFOB += cajas * p.fobUnidad * p.unidadesPorCaja;
                 totalUnits += cajas * p.unidadesPorCaja;
                 totalBoxes += cajas;
@@ -1213,7 +1212,7 @@
                 const p = productos.find(prod => prod.id == id);
                 const cajas = cart[id];
                 const units = cajas * p.unidadesPorCaja;
-                const volume = cajas * p.cbmUnidad * p.unidadesPorCaja;
+                const volume = cajas * p.cbmUnidad;
                 const fob = cajas * p.fobUnidad * p.unidadesPorCaja;
                 totalVolume += volume;
                 totalFOB += fob;
@@ -1305,7 +1304,7 @@
                 const p = productos.find(prod => prod.id == id);
                 const cajas = cart[id];
                 const units = cajas * p.unidadesPorCaja;
-                const volume = cajas * p.cbmUnidad * p.unidadesPorCaja;
+                const volume = cajas * p.cbmUnidad;
                 const fob = cajas * p.fobUnidad * p.unidadesPorCaja;
                 totalVolume += volume;
                 totalFOB += fob;
